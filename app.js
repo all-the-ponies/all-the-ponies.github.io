@@ -33,6 +33,10 @@ async function game() {
         }
     }
 
+    let progress_el = document.getElementById('progress')
+    let total_ponies = Object.values(ponies).length
+    progress_el.innerText = '0/'+total_ponies
+
     name_input.disabled = false
     const name_input_controller = new AbortController();
     name_input.addEventListener('input', (e) => {
@@ -44,6 +48,7 @@ async function game() {
         if (!used_ponies.includes(name) && ponies.hasOwnProperty(name)) {
             used_ponies.push(name)
             addPony(ponies[name])
+            progress_el.innerText = used_ponies.length+'/'+total_ponies
             name_input.value = ''
         }
     }, {'signal': name_input_controller.signal})
