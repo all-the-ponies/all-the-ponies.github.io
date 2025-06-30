@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All The Ponies</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <main>
+        <h1>All The Ponies</h1>
+
+        <label for="language">Language</label>
+        <select name="language" id="language">
+            <option value="english" selected>English</option>
+            <option value="arabic">Arabic</option>
+            <option value="chinese">Chinese</option>
+            <option value="french">French</option>
+            <option value="german">German</option>
+            <option value="italian">Italian</option>
+            <option value="japanese">Japanese</option>
+            <option value="korean">Korean</option>
+            <option value="brazilian portuguese">Brazilian Portuguese</option>
+            <option value="russian">Russian</option>
+            <option value="spanish">Spanish</option>
+            <option value="thai">Thai</option>
+            <option value="turkish">Turkish</option>
+        </select>
+
+        <button id="start" onclick="game()">Start</button>
+        <button id="stop" disabled>Stop</button>
+        <div id="timer">0:00</div>
+
+        <div id="game">
+            <div id="game-bar">
+                <textarea disabled name="name-input" id="name-input" placeholder="Name"></textarea>
+                <!-- <button id="name-enter">Submit</button> -->
+            </div>
+            <div id="ponies-list"></div>
+        </div>
+    </main>
+</body>
+</html>
