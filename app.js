@@ -33,15 +33,11 @@ async function game() {
         }
     }
 
-    console.log(alt_names)
-
     name_input.disabled = false
     const name_input_controller = new AbortController();
     name_input.addEventListener('input', (e) => {
-        console.log(name_input.value)
         let name = name_input.value.toLocaleLowerCase()
         if (alt_names.hasOwnProperty(name)) {
-            console.log('found', name)
             name = alt_names[name].toLocaleLowerCase()
         }
 
