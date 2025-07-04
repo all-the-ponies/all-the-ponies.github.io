@@ -21,6 +21,7 @@ class AllThePonies {
 
         this.ponyInfo = {}
         this.ponyNameMap = {}
+        this.altNames = {}
         this.guessedPonies = []
         this.totalPonies = 0
         this.startTime = 0
@@ -37,6 +38,8 @@ class AllThePonies {
 
     createNameMap() {
         this.totalPonies = 0
+        this.ponyNameMap = {}
+        this.altNames = {}
         for (let [ponyId, ponyInfo] of Object.entries(this.ponyInfo)) {
             if (typeof ponyInfo['tags'] != 'undefined' && ponyInfo['tags']) {
                 if (!ponyInfo['tags'].some(tag => this.tags.includes(tag))) {
@@ -81,7 +84,7 @@ class AllThePonies {
                 for (let name of ponyInfo['alt_name'][this.language]) {
                     newName = name
                     nameId = this.transformName(fixName(name))
-                    if (nameId in this.ponyNameMap) {
+                    if (nameId in this.altNames) {
                         if (isChangeling) {
                             if (name == this.ponyInfo[ponyInfo['changeling']['id']]['name'][this.language]) {
                                 console.log('changeling detected', name)
@@ -92,11 +95,11 @@ class AllThePonies {
                         newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
                         nameId = this.transformName(newName)
                         console.log(ponyId, name, newName)
-                        if (nameId in this.ponyNameMap) {
+                        if (nameId in this.altNames) {
                             console.log(ponyId, name, newName)
                         }
                     }
-                    this.ponyNameMap[nameId] = {
+                    this.altNames[nameId] = {
                         id: ponyId,
                         name: newName,
                     }
@@ -135,6 +138,8 @@ class AllThePonies {
     }
 
     bindEventListeners() {
+        this.languageSelector.addEventListener('change', () => this.createNameMap())
+
         this.startButton.addEventListener('click', () => this.start())
         this.stopButton.addEventListener('click', () => this.stop())
         this.nameInput.addEventListener('input', () => this.checkName())
@@ -144,12 +149,12 @@ class AllThePonies {
 
     checkName() {
         let nameId = this.transformName(this.nameInput.value)
-        if (nameId in this.ponyNameMap) {
-            let ponyId = this.ponyNameMap[nameId].id
-            if (!(this.guessedPonies.includes(ponyId))) {
-                this.guessedPonies.push(ponyId)
+        if (nameId in this.ponyNameMap || nameId in this.altNames) {
+            let pony = nameId in this.altNames ? this.altNames[nameId] : this.ponyNameMap[nameId]
+            if (!(this.guessedPonies.includes(pony.id))) {
+                this.guessedPonies.push(pony.id)
                 let nameElement = document.createElement('div')
-                nameElement.innerText = this.ponyNameMap[nameId].name
+                nameElement.innerText = pony.name
                 this.ponyListElement.append(nameElement)
                 this.nameInput.value = ''
                 this.updateProgress()
