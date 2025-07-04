@@ -77,7 +77,7 @@ class AllThePonies {
                 name: newName,
             }
 
-            if (typeof ponyInfo['alt_name'] != 'undefined') {
+            if (typeof ponyInfo['alt_name'] != 'undefined' && typeof ponyInfo['alt_name'][this.language] != 'undefined') {
                 for (let name of ponyInfo['alt_name'][this.language]) {
                     newName = name
                     nameId = this.transformName(fixName(name))
