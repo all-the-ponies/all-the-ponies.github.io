@@ -76,6 +76,32 @@ class AllThePonies {
                 id: ponyId,
                 name: newName,
             }
+
+            if (typeof ponyInfo['alt_name'] != 'undefined') {
+                for (let name of ponyInfo['alt_name'][this.language]) {
+                    newName = name
+                    nameId = this.transformName(fixName(name))
+                    if (nameId in this.ponyNameMap) {
+                        if (isChangeling) {
+                            if (name == this.ponyInfo[ponyInfo['changeling']['id']]['name'][this.language]) {
+                                console.log('changeling detected', name)
+                                continue
+                            }
+                        }
+
+                        newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
+                        nameId = this.transformName(newName)
+                        console.log(ponyId, name, newName)
+                        if (nameId in this.ponyNameMap) {
+                            console.log(ponyId, name, newName)
+                        }
+                    }
+                    this.ponyNameMap[nameId] = {
+                        id: ponyId,
+                        name: newName,
+                    }
+                }
+            }
         }
 
         this.totalPonies = Object.keys(this.ponyNameMap).length
