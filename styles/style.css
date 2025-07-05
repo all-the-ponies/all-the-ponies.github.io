@@ -14,6 +14,9 @@
     --page-width: 20rem;
     
     --font-family: "Celestia Medium Redux", Arial, Helvetica, sans-serif;
+
+    --text-shadow: 0px 1px rgba(0, 0, 0, 0.3);
+    
     --pink: #FF79A4;
     --pink-disabled: hsl(341, 100%, 90%);;
     --pink-enabled: hsl(341, 100%, 85%);
@@ -25,7 +28,6 @@ body {
 
     font-family: var(--font-family);
     color: var(--blue);
-    text-shadow: 0px 1px rgba(0, 0, 0, 0.3);
 }
 
 header {
@@ -36,6 +38,7 @@ header {
 
     color: white;
 
+    text-shadow: var(--text-shadow);
 }
 
 .header {
@@ -58,7 +61,7 @@ button {
     font-size: 1.3rem;
 
     color: white;
-    text-shadow: 0px 1px rgba(0, 0, 0, 0.3);
+    text-shadow: var(--text-shadow);
 
     border-style: none;
 
