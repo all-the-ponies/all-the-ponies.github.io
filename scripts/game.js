@@ -148,6 +148,7 @@ class AllThePonies {
     }
 
     checkName() {
+        this.nameInput.value = this.nameInput.value.replaceAll('\n', '')
         let nameId = this.transformName(this.nameInput.value)
         if (nameId in this.ponyNameMap || nameId in this.altNames) {
             let pony = nameId in this.altNames ? this.altNames[nameId] : this.ponyNameMap[nameId]
@@ -155,6 +156,7 @@ class AllThePonies {
                 this.guessedPonies.push(pony.id)
                 let nameElement = document.createElement('div')
                 nameElement.innerText = pony.name
+                nameElement.classList.add('pony-name')
                 this.ponyListElement.append(nameElement)
                 this.nameInput.value = ''
                 this.updateProgress()
@@ -183,6 +185,7 @@ class AllThePonies {
     }
 
     stop() {
+        this.nameInput.value = ''
         this.startButton.disabled = false
         this.stopButton.disabled = true
         this.nameInput.disabled = true
