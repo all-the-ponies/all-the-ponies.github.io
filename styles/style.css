@@ -55,7 +55,7 @@ main {
     position: relative;
 }
 
-.green-button {
+.button-green {
     --border-width: 1px;
     --border-radius: 5px;
 
