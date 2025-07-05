@@ -21,10 +21,11 @@
     --pink-disabled: hsl(341, 100%, 90%);;
     --pink-enabled: hsl(341, 100%, 85%);
     --blue: #0072B1;
+    --background-color: #e1f2fa;
 }
 
 body {
-    background-color: #E1F2FA;
+    background-color: var(--background-color);
 
     font-family: var(--font-family);
     color: var(--blue);
@@ -34,7 +35,7 @@ header {
     /* max-width: var(--page-width); */
     background-color: var(--pink);
     padding: 0.5rem 1rem;
-    margin: 0;
+    margin-bottom: 0.5rem;
 
     color: white;
 
@@ -49,12 +50,12 @@ header {
 
 main {
     max-width: var(--page-width);
-    margin: auto;
+    margin: 0.5rem auto;
     padding: 0 1rem;
     position: relative;
 }
 
-button {
+.green-button {
     --border-width: 1px;
     --border-radius: 5px;
 
@@ -85,7 +86,14 @@ button:hover, button:focus-visible {
     background-image: linear-gradient(#55cc1cff, #7fef2aff);
 }
 
+#game-bar {
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
 #name-input {
+    display: block;
     resize: none;
     width: 100%;
     height: auto;
@@ -100,6 +108,8 @@ button:hover, button:focus-visible {
     scrollbar-width: none;
 
     padding: 0.2em;
+
+    margin: 0;
 }
 
 #name-input:focus {
@@ -130,6 +140,13 @@ button:hover, button:focus-visible {
 
 #stop:disabled {
     display: none;
+}
+
+#ponies-list {
+    overflow: auto;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .pony-name {
