@@ -2,6 +2,7 @@ import { loadJSON, normalize, fixName, LOC, toTitleCase } from './common.js'
 
 class AllThePonies {
     constructor() {
+        this.gameBar = document.getElementById('game-bar')
         this.nameInput = document.getElementById('name-input')
         this.timerElement = document.getElementById('timer')
         this.progressElement = document.getElementById('progress')
@@ -175,6 +176,8 @@ class AllThePonies {
         this.startButton.disabled = true
         this.stopButton.disabled = false
         this.nameInput.disabled = false
+
+        
         this.languageSelector.disabled = true
         this.timerElement.innerText = '0:00'
         this.updateProgress()
@@ -182,6 +185,7 @@ class AllThePonies {
         this._timerInterval = setInterval(this.timerHandler, 1000)
 
         this.nameInput.focus()
+        this.gameBar.scrollIntoView()
     }
 
     stop() {

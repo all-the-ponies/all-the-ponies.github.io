@@ -13,34 +13,40 @@
     <header>
         <div class="header">
             <h1>All The Ponies</h1>
+            <select name="language" id="language">
+                <option value="english" selected>English</option>
+                <option value="arabic">Arabic</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <option value="german">German</option>
+                <option value="italian">Italian</option>
+                <option value="japanese">Japanese</option>
+                <option value="korean">Korean</option>
+                <option value="brazilian portuguese">Brazilian Portuguese</option>
+                <option value="russian">Russian</option>
+                <option value="spanish">Spanish</option>
+                <option value="thai">Thai</option>
+                <option value="turkish">Turkish</option>
+            </select>
         </div>
     </header>
     <main>
-
-        <label for="language">Language</label>
-        <select name="language" id="language">
-            <option value="english" selected>English</option>
-            <option value="arabic">Arabic</option>
-            <option value="chinese">Chinese</option>
-            <option value="french">French</option>
-            <option value="german">German</option>
-            <option value="italian">Italian</option>
-            <option value="japanese">Japanese</option>
-            <option value="korean">Korean</option>
-            <option value="brazilian portuguese">Brazilian Portuguese</option>
-            <option value="russian">Russian</option>
-            <option value="spanish">Spanish</option>
-            <option value="thai">Thai</option>
-            <option value="turkish">Turkish</option>
-        </select>
-
-        <button class="button-green" id="start">Start</button>
-        <button class="button-green" id="stop" disabled>Stop</button>
-        
-        
+        <section>
+            <p id="description">
+                Test your knowledge of the My Little Pony: Magic Princess
+                mobile game, and see how many ponies you can name.
+                It can still be fun even if you don't play the game,
+                because most ponies in G4 are in the game (there's some G1
+                ponies as well).
+            </p>
+        </section>
         <div id="game">
             <div id="game-bar">
-                <div>Time: <span id="timer">0:00</span> Ponies: <span id="progress"></span></div>
+                <div>
+                    Time: <span id="timer">0:00</span> Ponies: <span id="progress"></span>
+                    <button class="button-green" id="start">Start</button>
+                    <button class="button-green" id="stop" disabled>Stop</button>
+                </div>
                 <textarea rows="1" disabled name="name-input" id="name-input" placeholder="Name"></textarea>
                 <!-- <button id="name-enter">Submit</button> -->
             </div>
