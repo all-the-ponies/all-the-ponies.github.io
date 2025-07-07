@@ -199,6 +199,10 @@ button:hover, button:focus-visible {
     flex-direction: column;
 }
 
+#game:has(#stop:disabled) #ponies-list {
+    flex-direction: column;
+}
+
 @media (max-width: 600px) {
     #game {    
         flex-direction: column-reverse;
