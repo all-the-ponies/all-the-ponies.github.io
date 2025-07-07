@@ -11,6 +11,11 @@ class AllThePonies {
         this.languageSelector = document.getElementById('language')
         this.ponyListElement = document.getElementById('ponies-list')
 
+        let windowHeight = window.screen.height * window.devicePixelRatio
+
+
+
+
         this.options = {
             ignoreSpaces: true,
             caseSensitive: false,
@@ -184,6 +189,10 @@ class AllThePonies {
         this.startTime = new Date().getTime()
         this._timerInterval = setInterval(this.timerHandler, 1000)
 
+        this.ponyListElement.style.setProperty(
+            '--bottom-sticky',
+            document.documentElement.clientHeight - this.gameBar.getBoundingClientRect().top + 'px',
+        )
         this.nameInput.focus()
         this.gameBar.scrollIntoView()
     }

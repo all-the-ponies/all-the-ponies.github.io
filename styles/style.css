@@ -36,8 +36,6 @@ body {
     font-family: var(--font-family);
     font-size: var(--font-size);
     color: var(--blue);
-
-    min-height: 100dvh;
 }
 
 header {
@@ -66,6 +64,7 @@ main {
     margin: 0.5rem auto;
     padding: 0 1rem;
     position: relative;
+    height: 100%;
 }
 
 .button-green {
@@ -176,14 +175,61 @@ button:hover, button:focus-visible {
 }
 
 #game {
-    
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 0.5rem);
 }
 
 #ponies-list {
+    --bottom-sticky: 65px; /* later set in js */
+
     overflow: auto;
-    max-height: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column-reverse;
+    /* background-color: pink; */
+}
+
+#ponies-list-container {
+
+    /* background-color: red; */
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 600px) {
+    #game {    
+        flex-direction: column-reverse;
+    }
+
+    #game-bar {
+        top: unset;
+        bottom: 0;
+        padding-bottom: 0.5rem;
+        z-index: 1;
+    }
+
+    #game:has(#stop:disabled) {
+        min-height: auto;
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+
+    main:has(#start:disabled) {
+        margin-bottom: 0;
+    }
+
+    #ponies-list {
+        flex-direction: column;
+        position: sticky;
+        bottom: var(--bottom-sticky);
+    }
+
+    #ponies-list-container {
+        flex-direction: column-reverse;
+    }
 }
 
 .pony-name {
