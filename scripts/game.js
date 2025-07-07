@@ -164,6 +164,7 @@ class AllThePonies {
                 nameElement.innerText = pony.name
                 nameElement.classList.add('pony-name')
                 this.ponyListElement.append(nameElement)
+                nameElement.scrollIntoView()
                 this.nameInput.value = ''
                 this.updateProgress()
             }
