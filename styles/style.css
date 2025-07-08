@@ -28,6 +28,26 @@
     --white-enabled: rgba(252, 252, 252, 0.7);
     --white-disabled: rgba(252, 252, 252, 0.4);
     --page-background-color: #e1f2fa;
+
+
+    --green-gradient-top-color: #7fef2aff;
+    --green-gradient-bottom-color: #55cc1cff;
+    --green-gradient-shadow-color: #40A715;
+    --blue-gradient-top-color: #60D5EE;
+    --blue-gradient-bottom-color: #3EB3CC;
+    --blue-gradient-shadow-color: #2CA1BA;
+    --red-gradient-top-color: #FF8A79;
+    --red-gradient-bottom-color: #FF5443;
+    --red-gradient-shadow-color: #FF4432;
+    --pink-gradient-top-color: #FF91B4;
+    --pink-gradient-bottom-color: #FF6B9B;
+    --pink-gradient-shadow-color: #FF1461;
+    --orange-gradient-top-color: #F8D82F;
+    --orange-gradient-bottom-color: #EB8B1E;
+    --orange-gradient-shadow-color: #BB8321;
+    --grey-gradient-top-color: #939393;
+    --grey-gradient-bottom-color: #848484;
+    --grey-gradient-shadow-color: #626262;
 }
 
 body {
@@ -67,7 +87,10 @@ main {
     height: 100%;
 }
 
-.button-green {
+.button-green,
+.button-red,
+.button-blue,
+.button-orange {
     --border-width: 1px;
     --border-radius: 5px;
 
@@ -79,7 +102,7 @@ main {
     border-style: none;
 
     font-family: var(--font-family);
-    background-image: linear-gradient(#7fef2aff, #55cc1cff);
+    background-image: linear-gradient(var(--top-color), var(--bottom-color));
     /* padding: var(--border-width); */
     padding: 0.1em 0.7em;
     margin-bottom: 2px;
@@ -90,13 +113,46 @@ main {
     /* border: solid #40A715 var(--border-width); */
     border-radius: var(--border-radius);
 
-    box-shadow: 0px 1px 0px 1px #40A715;
+    box-shadow: 0px 1px 0px 1px var(--shadow-color);
 
     cursor: pointer;
 }
 
 button:hover, button:focus-visible {
-    background-image: linear-gradient(#55cc1cff, #7fef2aff);
+    background-image: linear-gradient(var(--bottom-color), var(--top-color));
+}
+
+.button-green {
+    --top-color: var(--green-gradient-top-color);
+    --bottom-color: var(--green-gradient-bottom-color);
+    --shadow-color: var(--green-gradient-shadow-color);
+}
+
+.button-blue {
+    --top-color: var(--blue-gradient-top-color);
+    --bottom-color: var(--blue-gradient-bottom-color);
+    --shadow-color: var(--blue-gradient-shadow-color);
+}
+
+.button-red {
+    --top-color: var(--red-gradient-top-color);
+    --bottom-color: var(--red-gradient-bottom-color);
+    --shadow-color: var(--red-gradient-shadow-color);
+}
+
+.button-orange {
+    --top-color: var(--orange-gradient-top-color);
+    --bottom-color: var(--orange-gradient-bottom-color);
+    --shadow-color: var(--orange-gradient-shadow-color);
+}
+
+.button-green:disabled,
+.button-red:disabled,
+.button-blue:disabled,
+.button-orange:disabled {
+    --top-color: var(--grey-gradient-top-color);
+    --bottom-color: var(--grey-gradient-bottom-color);
+    --shadow-color: var(--grey-gradient-shadow-color);
 }
 
 #language {
@@ -238,4 +294,41 @@ button:hover, button:focus-visible {
 
 .pony-name {
     color: var(--pink);
+}
+
+.dialog {
+    margin: auto auto ;
+    border: none !important;
+    border-radius: calc(5px * var(--ratio));
+    box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    padding: 1.6rem;
+    overflow: visible;
+}
+
+.dialog-header {
+    translate: 0 -100%;
+    padding: 0.2em 1em;
+    color: white;
+    text-shadow: var(--text-shadow);
+    font-size: 1.7rem;
+    
+    perspective-origin: 50% 50%;
+    perspective: 300px;
+    transform-style: preserve-3d;
+}
+
+.dialog-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    transform: rotateX(-30deg) translateZ(-5px) translateY(5px);
+    
+    background-image: linear-gradient(var(--pink-gradient-top-color), var(--pink-gradient-bottom-color));
+    box-shadow: 0px 1px 0px 1px var(--pink-gradient-shadow-color);
+    border-radius: 0.2em;
 }

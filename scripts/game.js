@@ -10,6 +10,8 @@ class AllThePonies {
         this.stopButton = document.getElementById('stop')
         this.languageSelector = document.getElementById('language')
         this.ponyListElement = document.getElementById('ponies-list')
+        this.optionsButton = document.getElementById('options')
+        this.optionsDialog = document.getElementById('options-dialog')
 
         let windowHeight = window.screen.height * window.devicePixelRatio
 
@@ -149,6 +151,10 @@ class AllThePonies {
         this.startButton.addEventListener('click', () => this.start())
         this.stopButton.addEventListener('click', () => this.stop())
         this.nameInput.addEventListener('input', () => this.checkName())
+
+        this.optionsButton.addEventListener('click', () => {
+            this.optionsDialog.showModal()
+        })
 
         this.timerHandler = () => this.updateTime()
     }
