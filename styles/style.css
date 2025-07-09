@@ -118,7 +118,15 @@ main {
     cursor: pointer;
 }
 
-button:hover, button:focus-visible {
+.button-green:hover,
+.button-red:hover,
+.button-blue:hover,
+.button-orange:hover,
+
+.button-green:focus-visible,
+.button-red:focus-visible,
+.button-blue:focus-visible,
+.button-orange:focus-visible {
     background-image: linear-gradient(var(--bottom-color), var(--top-color));
 }
 
@@ -306,12 +314,13 @@ button:hover, button:focus-visible {
 }
 
 .dialog-header {
+    text-align: center;
     translate: 0 -100%;
     padding: 0.2em 1em;
     color: white;
     text-shadow: var(--text-shadow);
     font-size: 1.7rem;
-    
+
     perspective-origin: 50% 50%;
     perspective: 300px;
     transform-style: preserve-3d;
@@ -331,4 +340,10 @@ button:hover, button:focus-visible {
     background-image: linear-gradient(var(--pink-gradient-top-color), var(--pink-gradient-bottom-color));
     box-shadow: 0px 1px 0px 1px var(--pink-gradient-shadow-color);
     border-radius: 0.2em;
+}
+
+.dialog-confirmation {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5em;
 }
