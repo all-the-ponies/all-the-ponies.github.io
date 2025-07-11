@@ -73,5 +73,17 @@
     "spanish": "KLUGETOWN",
     "thai": "คลูจทาวน์",
     "turkish": "KLUGETOWN"
+  },
+  "OPTIONS_IGNORE_SPACES": {
+    "english": "Ignore Spaces"
+  },
+  "OPTIONS_CASE_SENSITIVE": {
+    "english": "Case sensitive"
+  },
+  "OPTIONS_IGNORE_ACCENTS": {
+    "english": "Ignore accents"
+  },
+  "OPTIONS_IGNORE_PUNCTUATION": {
+    "english": "Ignore punctuation"
   }
 }

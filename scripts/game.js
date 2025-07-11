@@ -1,21 +1,20 @@
 import { loadJSON, normalize, fixName, LOC, toTitleCase } from './common.js'
+import './jquery-3.7.1.min.js'
 
 class AllThePonies {
     constructor() {
-        this.gameBar = document.getElementById('game-bar')
-        this.nameInput = document.getElementById('name-input')
-        this.timerElement = document.getElementById('timer')
-        this.progressElement = document.getElementById('progress')
-        this.startButton = document.getElementById('start')
-        this.stopButton = document.getElementById('stop')
-        this.languageSelector = document.getElementById('language')
-        this.ponyListElement = document.getElementById('ponies-list')
-        this.optionsButton = document.getElementById('options')
-        this.optionsDialog = document.getElementById('options-dialog')
+        this.gameBar = $('#game-bar')
+        this.nameInput = $('#name-input')
+        this.timerElement = $('#timer')
+        this.progressElement = $('#progress')
+        this.startButton = $('#start')
+        this.stopButton = $('#stop')
+        this.languageSelector = $('#language')
+        this.ponyListElement = $('#ponies-list')
+        this.optionsButton = $('#options')
+        this.optionsDialog = $('#options-dialog')
 
         let windowHeight = window.screen.height * window.devicePixelRatio
-
-
 
 
         this.options = {
@@ -23,6 +22,25 @@ class AllThePonies {
             caseSensitive: false,
             ignoreAccents: true,
             ignorePunctuation: true,
+        }
+
+        this.optionInfo = {
+            ignoreSpaces: {
+                type: 'switch',
+                name: 'OPTIONS_IGNORE_SPACES',
+            },
+            caseSensitive: {
+                type: 'switch',
+                name: 'OPTIONS_CASE_SENSITIVE',
+            },
+            ignoreAccents: {
+                type: 'switch',
+                name: 'OPTIONS_IGNORE_ACCENTS',
+            },
+            ignorePunctuation: {
+                type: 'switch',
+                name: 'OPTIONS_IGNORE_PUNCTUATION',
+            },
         }
 
         this.tags = ['unused']
@@ -120,11 +138,11 @@ class AllThePonies {
     }
 
     get language() {
-        return this.languageSelector.value
+        return this.languageSelector.val()
     }
 
     set language(lang) {
-        this.languageSelector.value = lang
+        this.languageSelector.val(lang)
     }
 
     transformName(name) {
@@ -146,70 +164,71 @@ class AllThePonies {
     }
 
     bindEventListeners() {
-        this.languageSelector.addEventListener('change', () => this.createNameMap())
+        this.languageSelector.on('change', () => this.createNameMap())
 
-        this.startButton.addEventListener('click', () => this.start())
-        this.stopButton.addEventListener('click', () => this.stop())
-        this.nameInput.addEventListener('input', () => this.checkName())
+        this.startButton.on('click', () => this.start())
+        this.stopButton.on('click', () => this.stop())
+        this.nameInput.on('input', () => this.checkName())
 
-        this.optionsButton.addEventListener('click', () => {
-            this.optionsDialog.showModal()
-        })
+        this.optionsButton.on('click', () => this.showOptionsDialog())
 
         this.timerHandler = () => this.updateTime()
     }
 
     checkName() {
-        this.nameInput.value = this.nameInput.value.replaceAll('\n', '')
-        let nameId = this.transformName(this.nameInput.value)
+        console.log('checking')
+        this.nameInput.val(this.nameInput.val().replaceAll('\n', ''))
+        console.log(this.nameInput.val())
+        let nameId = this.transformName(this.nameInput.val())
+        console.log(nameId)
         if (nameId in this.ponyNameMap || nameId in this.altNames) {
             let pony = nameId in this.altNames ? this.altNames[nameId] : this.ponyNameMap[nameId]
             if (!(this.guessedPonies.includes(pony.id))) {
                 this.guessedPonies.push(pony.id)
-                let nameElement = document.createElement('div')
-                nameElement.innerText = pony.name
-                nameElement.classList.add('pony-name')
+                let nameElement = $('<div>')
+                    .addClass('pony-name')
+                    .text(pony.name)
                 this.ponyListElement.append(nameElement)
-                nameElement.scrollIntoView()
-                this.nameInput.value = ''
+                nameElement[0].scrollIntoView()
+                this.nameInput.val('')
                 this.updateProgress()
             }
         }
     }
 
     updateProgress() {
-        this.progressElement.innerText = `${this.guessedPonies.length}/${this.totalPonies}`
+        this.progressElement.text(`${this.guessedPonies.length}/${this.totalPonies}`)
     }
 
     start() {
         this.stop()
         this.guessedPonies = []
-        this.ponyListElement.replaceChildren()
-        this.startButton.disabled = true
-        this.stopButton.disabled = false
-        this.nameInput.disabled = false
+        this.ponyListElement.empty()
+        this.startButton[0].disabled = true
+        this.stopButton[0].disabled = false
+        this.nameInput[0].disabled = false
 
         
-        this.languageSelector.disabled = true
-        this.timerElement.innerText = '0:00'
+        this.languageSelector[0].disabled = true
+        this.timerElement[0].innerText = '0:00'
         this.updateProgress()
         this.startTime = new Date().getTime()
         this._timerInterval = setInterval(this.timerHandler, 1000)
 
-        this.ponyListElement.style.setProperty(
+        this.ponyListElement.css(
             '--bottom-sticky',
-            document.documentElement.clientHeight - this.gameBar.getBoundingClientRect().top + 'px',
+            document.documentElement.clientHeight - this.gameBar.offset().top + 'px',
         )
-        this.nameInput.focus()
-        this.gameBar.scrollIntoView()
+        this.nameInput.trigger('focus')
+        this.gameBar[0].scrollIntoView()
     }
 
     stop() {
         this.nameInput.value = ''
-        this.startButton.disabled = false
-        this.stopButton.disabled = true
-        this.nameInput.disabled = true
-        this.languageSelector.disabled = false
+        this.startButton[0].disabled = false
+        this.stopButton[0].disabled = true
+        this.nameInput[0].disabled = true
+        this.languageSelector[0].disabled = false
         clearInterval(this._timerInterval)
     }
 
@@ -219,7 +238,28 @@ class AllThePonies {
 
         let seconds = Math.floor((timeElapsed % (1000 * 60)) / 1000);
         let minutes = Math.floor((timeElapsed % (1000 * 60 * 60)) / (1000 * 60))
-        this.timerElement.innerText = `${minutes}:${seconds.toString().length == 1 ? '0' : ''}${seconds}`
+        this.timerElement.text(`${minutes}:${seconds.toString().length == 1 ? '0' : ''}${seconds}`)
+    }
+
+    showOptionsDialog() {
+        let formOptions = this.optionsDialog.find('.form-options')
+        formOptions.empty()
+        for (let [option, optionInfo] of Object.entries(this.optionInfo)) {
+            $('<div>').addClass('form-option')
+                .append(
+                    $('<input>', {
+                        type: 'checkbox',
+                        name: option,
+                        id: `option-${option}`,
+                    }),
+                    $('<label>', {
+                        for: `option-${option}`,
+                        text: LOC.translate(optionInfo.name),
+                    })
+                ).appendTo(formOptions)
+        }
+
+        this.optionsDialog[0].showModal()
     }
 }
 
