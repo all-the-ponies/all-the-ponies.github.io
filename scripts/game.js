@@ -22,6 +22,7 @@ class AllThePonies {
             caseSensitive: false,
             ignoreAccents: true,
             ignorePunctuation: true,
+            includeUnused: false,
         }
 
         this.optionInfo = {
@@ -41,6 +42,10 @@ class AllThePonies {
                 type: 'switch',
                 name: 'OPTIONS_IGNORE_PUNCTUATION',
             },
+            includeUnused: {
+                type: 'switch',
+                name: 'OPTIONS_INCLUDE_UNUSED',
+            }
         }
 
         this.tags = ['unused']
@@ -63,6 +68,18 @@ class AllThePonies {
     }
 
     createNameMap() {
+        if (this.options.includeUnused) {
+            if (!this.tags.includes('unused')) {
+                this.tags.push('unused')
+            }
+        } else {
+            if (this.tags.includes('unused')) {
+                this.tags.splice(this.tags.indexOf('unused'))
+            }
+        }
+
+        console.log('tags', this.tags)
+
         this.totalPonies = 0
         this.ponyNameMap = {}
         this.altNames = {}

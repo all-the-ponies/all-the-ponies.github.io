@@ -69,7 +69,11 @@ export class Localization {
   }
 
   translate(key) {
-    return this.dictionary[key][this.language]
+    if (typeof this.dictionary[key] != 'undefined') {
+      return this.dictionary[key][this.language] || this.dictionary[key]['english']
+    } else {
+      return key
+    }
   }
 }
 

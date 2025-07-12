@@ -85,5 +85,8 @@
   },
   "OPTIONS_IGNORE_PUNCTUATION": {
     "english": "Ignore punctuation"
+  },
+  "OPTIONS_INCLUDE_UNUSED": {
+    "english": "Include unused characters"
   }
 }
