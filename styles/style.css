@@ -324,6 +324,12 @@ main {
     perspective-origin: 50% 50%;
     perspective: 300px;
     transform-style: preserve-3d;
+    
+    position: absolute;
+    margin-inline: auto;
+    right: 0;
+    left: 0;
+    width: fit-content;
 }
 
 .dialog-header::before {

@@ -173,6 +173,8 @@ class AllThePonies {
         this.optionsButton.on('click', () => this.showOptionsDialog())
 
         this.timerHandler = () => this.updateTime()
+
+        this.optionsDialog.find('[value="ok"]').on('click', () => this.submitOptionsDialog())
     }
 
     checkName() {
@@ -243,23 +245,51 @@ class AllThePonies {
 
     showOptionsDialog() {
         let formOptions = this.optionsDialog.find('.form-options')
-        formOptions.empty()
+        // formOptions.empty()
+        let optionElements = {}
         for (let [option, optionInfo] of Object.entries(this.optionInfo)) {
-            $('<div>').addClass('form-option')
-                .append(
-                    $('<input>', {
-                        type: 'checkbox',
-                        name: option,
-                        id: `option-${option}`,
-                    }),
-                    $('<label>', {
-                        for: `option-${option}`,
-                        text: LOC.translate(optionInfo.name),
-                    })
-                ).appendTo(formOptions)
+            let optionElement = formOptions.find(`#option-${option}`)
+            console.log(option, optionElement)
+            if (!optionElement.length) {
+                optionElement = $('<input>', {
+                    type: 'checkbox',
+                    name: option,
+                    id: `option-${option}`,
+                })
+                $('<div>').addClass('form-option')
+                    .append(
+                        optionElement,
+                        $('<label>', {
+                            for: `option-${option}`,
+                            text: LOC.translate(optionInfo.name),
+                        })
+                    ).appendTo(formOptions)
+            }
+
+            optionElements[option] = optionElement
+        }
+
+        for (let [option, optionElement] of Object.entries(optionElements)) {
+            optionElement.prop('checked', this.options[option])
         }
 
         this.optionsDialog[0].showModal()
+    }
+
+    submitOptionsDialog() {
+        let formOptions = this.optionsDialog.find('form')
+        let formData = new FormData(formOptions[0])
+        console.log(formOptions[0]
+            , formData)
+
+        for (let [option, optionInfo] of Object.entries(this.optionInfo)) {
+            let optionElement = formOptions.find(`#option-${option}`)
+            if (optionElement.length) {
+                this.options[option] = optionElement.prop('checked')
+            }
+        }
+
+        this.createNameMap()
     }
 }
 
