@@ -30,24 +30,24 @@
     --page-background-color: #e1f2fa;
 
 
-    --green-gradient-top-color: #7fef2aff;
-    --green-gradient-bottom-color: #55cc1cff;
-    --green-gradient-shadow-color: #40A715;
-    --blue-gradient-top-color: #60D5EE;
-    --blue-gradient-bottom-color: #3EB3CC;
-    --blue-gradient-shadow-color: #2CA1BA;
-    --red-gradient-top-color: #FF8A79;
-    --red-gradient-bottom-color: #FF5443;
-    --red-gradient-shadow-color: #FF4432;
-    --pink-gradient-top-color: #FF91B4;
-    --pink-gradient-bottom-color: #FF6B9B;
-    --pink-gradient-shadow-color: #FF1461;
-    --orange-gradient-top-color: #F8D82F;
-    --orange-gradient-bottom-color: #EB8B1E;
-    --orange-gradient-shadow-color: #BB8321;
-    --grey-gradient-top-color: #939393;
-    --grey-gradient-bottom-color: #848484;
-    --grey-gradient-shadow-color: #626262;
+    --green-light: #7fef2aff;
+    --green: #55cc1cff;
+    --green-dark: #40A715;
+    --light-blue-light: #60D5EE;
+    --light-blue: #3EB3CC;
+    --light-blue-dark: #2CA1BA;
+    --red-light: #FF8A79;
+    --red: #FF5443;
+    --red-dark: #FF4432;
+    --pink-light: #FF91B4;
+    --pink: #FF6B9B;
+    --pink-dark: #FF1461;
+    --orange-light: #F8D82F;
+    --orange: #EB8B1E;
+    --orange-dark: #BB8321;
+    --grey-light: #939393;
+    --grey: #848484;
+    --grey-dark: #626262;
 }
 
 body {
@@ -105,6 +105,7 @@ main {
     background-image: linear-gradient(var(--top-color), var(--bottom-color));
     /* padding: var(--border-width); */
     padding: 0.1em 0.7em;
+    margin: 0.1em;
     margin-bottom: 2px;
     background-repeat: no-repeat;
 
@@ -131,36 +132,36 @@ main {
 }
 
 .button-green {
-    --top-color: var(--green-gradient-top-color);
-    --bottom-color: var(--green-gradient-bottom-color);
-    --shadow-color: var(--green-gradient-shadow-color);
+    --top-color: var(--green-light);
+    --bottom-color: var(--green);
+    --shadow-color: var(--green-dark);
 }
 
 .button-blue {
-    --top-color: var(--blue-gradient-top-color);
-    --bottom-color: var(--blue-gradient-bottom-color);
-    --shadow-color: var(--blue-gradient-shadow-color);
+    --top-color: var(--light-blue-light);
+    --bottom-color: var(--light-blue);
+    --shadow-color: var(--light-blue-dark);
 }
 
 .button-red {
-    --top-color: var(--red-gradient-top-color);
-    --bottom-color: var(--red-gradient-bottom-color);
-    --shadow-color: var(--red-gradient-shadow-color);
+    --top-color: var(--red-light);
+    --bottom-color: var(--red);
+    --shadow-color: var(--red-dark);
 }
 
 .button-orange {
-    --top-color: var(--orange-gradient-top-color);
-    --bottom-color: var(--orange-gradient-bottom-color);
-    --shadow-color: var(--orange-gradient-shadow-color);
+    --top-color: var(--orange-light);
+    --bottom-color: var(--orange);
+    --shadow-color: var(--orange-dark);
 }
 
 .button-green:disabled,
 .button-red:disabled,
 .button-blue:disabled,
 .button-orange:disabled {
-    --top-color: var(--grey-gradient-top-color);
-    --bottom-color: var(--grey-gradient-bottom-color);
-    --shadow-color: var(--grey-gradient-shadow-color);
+    --top-color: var(--grey-light);
+    --bottom-color: var(--grey);
+    --shadow-color: var(--grey-dark);
 }
 
 #language {
@@ -346,8 +347,8 @@ main {
     
     transform: rotateX(-30deg) translateZ(-5px) translateY(5px);
     
-    background-image: linear-gradient(var(--pink-gradient-top-color), var(--pink-gradient-bottom-color));
-    box-shadow: 0px 1px 0px 1px var(--pink-gradient-shadow-color);
+    background-image: linear-gradient(var(--pink-light), var(--pink));
+    box-shadow: 0px 1px 0px 1px var(--pink-dark);
     border-radius: 0.2em;
 }
 
@@ -355,4 +356,61 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5em;
+}
+
+.form-option {
+    display: block;
+}
+
+.form-option input {
+    display: none;
+}
+
+.form-option {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.1em;
+    cursor: pointer;
+}
+
+.form-option .option-text {
+    translate: 0 -0.1em;
+}
+
+.form-option:has(input:disabled) {
+    cursor: default;
+}
+
+.form-option .switch {
+    display: inline-block;
+    background-color: var(--grey-light);
+    width: 12px;
+    height: 5px;
+    border-radius: 50rem;
+    position: relative;
+    margin-right: 5px;
+}
+
+.form-option input[type="checkbox"]:checked+.switch {
+    background-color: var(--light-blue-light);
+}
+
+.switch::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50rem;
+    background-color: var(--grey);
+    position: absolute;
+    left: -5px;
+    top: -2.5px;
+
+    transition: left 200ms;
+}
+
+.form-option input[type="checkbox"]:checked+.switch::after {
+    background-color: var(--light-blue);
+    left: calc(100% - 5px);
 }

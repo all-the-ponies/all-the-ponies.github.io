@@ -256,11 +256,16 @@ class AllThePonies {
                     name: option,
                     id: `option-${option}`,
                 })
-                $('<div>').addClass('form-option')
-                    .append(
+                $('<label>', {
+                    class: 'form-option',
+                    for: `option-${option}`,
+                }).append(
                         optionElement,
-                        $('<label>', {
-                            for: `option-${option}`,
+                        $('<div>', {
+                            class: 'switch',
+                        }),
+                        $('<span>', {
+                            class: 'option-text',
                             text: LOC.translate(optionInfo.name),
                         })
                     ).appendTo(formOptions)
