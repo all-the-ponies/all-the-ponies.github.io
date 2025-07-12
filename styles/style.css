@@ -311,6 +311,9 @@ main {
     box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     padding: 1.6rem;
     overflow: visible;
+
+    border-radius: 10px;
+    box-shadow: inset 0px -1px 4px hsl(211, 30%, 55%);
 }
 
 .dialog-header {
@@ -324,7 +327,7 @@ main {
     perspective-origin: 50% 50%;
     perspective: 300px;
     transform-style: preserve-3d;
-    
+
     position: absolute;
     margin-inline: auto;
     right: 0;
