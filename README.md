@@ -9,7 +9,7 @@ This is (or will be) a game where you try to name as many mlp gameloft ponies. T
 [ ] Start/stop buttons as images instead of text
 [ ] Pause button
 [ ] Share button
-[ ] Options
+[x] Options
 [ ] Save and continue later
 
 ### Pony index
