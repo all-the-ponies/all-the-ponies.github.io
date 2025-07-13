@@ -48,6 +48,9 @@
     --grey-light: #939393;
     --grey: #848484;
     --grey-dark: #626262;
+    --light-grey-light: hsl(0, 0%, 80%);
+    --light-grey: hsl(0, 0%, 70%);
+    --light-grey-dark: hsl(0, 0%, 60%);
 }
 
 body {
@@ -384,7 +387,7 @@ main {
 
 .form-option .switch {
     display: inline-block;
-    background-color: var(--grey-light);
+    background-color: var(--light-grey-light);
     width: 12px;
     height: 5px;
     border-radius: 50rem;
@@ -402,7 +405,7 @@ main {
     height: 10px;
     aspect-ratio: 1 / 1;
     border-radius: 50rem;
-    background-color: var(--grey);
+    background-color: var(--light-grey);
     position: absolute;
     left: -5px;
     top: -2.5px;
