@@ -237,6 +237,7 @@ class AllThePonies {
         this.startButton[0].disabled = true
         this.stopButton[0].disabled = false
         this.nameInput[0].disabled = false
+        this.nameInput.val('')
 
         
         this.languageSelector[0].disabled = true
