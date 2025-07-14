@@ -77,7 +77,7 @@ export class Localization {
   }
 }
 
-export var LOC = new Localization('assets/json/localization.json')
+export var LOC = new Localization('/assets/json/localization.json')
 
 export function capitalize(str) {
   if (str == '') return ''

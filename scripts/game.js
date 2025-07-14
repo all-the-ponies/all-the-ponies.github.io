@@ -1,3 +1,4 @@
+import GameData from './gameData.js'
 import { loadJSON, normalize, fixName, LOC, toTitleCase, scrollIntoViewWithOffset } from './common.js'
 import './jquery-3.7.1.min.js'
 
@@ -50,6 +51,8 @@ class AllThePonies {
 
         this.tags = ['unused']
 
+        this.gameData = new GameData('/assets/json/game-data.json')
+
         this.ponyInfo = {}
         this.ponyNameMap = {}
         this.altNames = {}
@@ -59,7 +62,7 @@ class AllThePonies {
 
         
         this.loadPonies()
-        this.createNameMap()
+        this.update()
         this.bindEventListeners()
     }
 
@@ -67,90 +70,13 @@ class AllThePonies {
         this.ponyInfo = loadJSON('assets/json/ponies.json')
     }
 
-    createNameMap() {
-        if (this.options.includeUnused) {
-            if (!this.tags.includes('unused')) {
-                this.tags.push('unused')
-            }
-        } else {
-            if (this.tags.includes('unused')) {
-                this.tags.splice(this.tags.indexOf('unused'))
-            }
+    update() {
+        this.gameData.options = {
+            ...this.gameData.options,
+            ...this.options,
         }
-
-        console.log('tags', this.tags)
-
-        this.totalPonies = 0
-        this.ponyNameMap = {}
-        this.altNames = {}
-        for (let [ponyId, ponyInfo] of Object.entries(this.ponyInfo)) {
-            if (typeof ponyInfo['tags'] != 'undefined' && ponyInfo['tags']) {
-                if (!ponyInfo['tags'].some(tag => this.tags.includes(tag))) {
-                    console.log(`${ponyId} not included`)
-                    continue
-                }
-            }
-            
-            let name = fixName(ponyInfo['name'][this.language])
-            let newName = name
-
-            let nameId = this.transformName(newName)
-
-            let isChangeling = 'changeling' in ponyInfo && (!!ponyInfo['changeling']['id'])
-            
-            // this.totalPonies += 1
-            // if (!(isChangeling && ponyInfo['changeling']['IamAlt'])) {
-            // }
-            
-            if (nameId in this.ponyNameMap) {
-                if (isChangeling) {
-                    if (name == this.ponyInfo[ponyInfo['changeling']['id']]['name'][this.language]) {
-                        console.log('changeling detected', name)
-                        continue
-                    }
-                }
-
-                newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
-                nameId = this.transformName(newName)
-                console.log(ponyId, name, newName)
-                if (nameId in this.ponyNameMap) {
-                    console.log(ponyId, name, newName)
-                }
-            }
-
-            this.ponyNameMap[nameId] = {
-                id: ponyId,
-                name: newName,
-            }
-
-            if (typeof ponyInfo['alt_name'] != 'undefined' && typeof ponyInfo['alt_name'][this.language] != 'undefined') {
-                for (let name of ponyInfo['alt_name'][this.language]) {
-                    newName = name
-                    nameId = this.transformName(fixName(name))
-                    if (nameId in this.altNames) {
-                        if (isChangeling) {
-                            if (name == this.ponyInfo[ponyInfo['changeling']['id']]['name'][this.language]) {
-                                console.log('changeling detected', name)
-                                continue
-                            }
-                        }
-
-                        newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
-                        nameId = this.transformName(newName)
-                        console.log(ponyId, name, newName)
-                        if (nameId in this.altNames) {
-                            console.log(ponyId, name, newName)
-                        }
-                    }
-                    this.altNames[nameId] = {
-                        id: ponyId,
-                        name: newName,
-                    }
-                }
-            }
-        }
-
-        this.totalPonies = Object.keys(this.ponyNameMap).length
+        this.gameData.language = this.language
+        // this.gameData.update() // We don't need to update because setting the language already updates
         this.updateProgress()
     }
 
@@ -181,7 +107,7 @@ class AllThePonies {
     }
 
     bindEventListeners() {
-        this.languageSelector.on('change', () => this.createNameMap())
+        this.languageSelector.on('change', () => this.update())
 
         this.startButton.on('click', () => this.start())
         this.stopButton.on('click', () => this.stop())
@@ -195,39 +121,38 @@ class AllThePonies {
     }
 
     checkName() {
-        console.log('checking')
         this.nameInput.val(this.nameInput.val().replaceAll('\n', ''))
-        console.log(this.nameInput.val())
-        let nameId = this.transformName(this.nameInput.val())
-        console.log(nameId)
-        if (nameId in this.ponyNameMap || nameId in this.altNames) {
-            let pony = nameId in this.altNames ? this.altNames[nameId] : this.ponyNameMap[nameId]
-            if (!(this.guessedPonies.includes(pony.id))) {
-                this.guessedPonies.push(pony.id)
-                let nameElement = $('<div>', {
-                    class: 'pony-name',
-                }).append(
-                    $('<img>', {
-                        class: 'name-image',
-                        src: `./assets/images/ponies/portrait/${pony.id}.png`,
-                    }),
-                    $('<span>', {
-                        text: pony.name,
-                    })
-                )
-                this.ponyListElement.append(nameElement)
-                scrollIntoViewWithOffset(
-                    nameElement[0],
-                    this.gameBar.height() + Number(getComputedStyle(game.ponyListElement[0]).marginTop.replace('px', '')),
-                )
-                this.nameInput.val('')
-                this.updateProgress()
-            }
+
+        let pony = this.gameData.matchName(this.nameInput.val())
+        if (pony == null) {
+            return
+        }
+
+        if (!(this.guessedPonies.includes(pony.id))) {
+            this.guessedPonies.push(pony.id)
+            let nameElement = $('<div>', {
+                class: 'pony-name',
+            }).append(
+                $('<img>', {
+                    class: 'name-image',
+                    src: pony.image.portrait,
+                }),
+                $('<span>', {
+                    text: pony.usedName || pony.name[this.language],
+                })
+            )
+            this.ponyListElement.append(nameElement)
+            scrollIntoViewWithOffset(
+                nameElement[0],
+                this.gameBar.height() + Number(getComputedStyle(game.ponyListElement[0]).marginTop.replace('px', '')),
+            )
+            this.nameInput.val('')
+            this.updateProgress()
         }
     }
 
     updateProgress() {
-        this.progressElement.text(`${this.guessedPonies.length}/${this.totalPonies}`)
+        this.progressElement.text(`${this.guessedPonies.length}/${this.gameData.totalPonies}`)
     }
 
     start() {
@@ -323,7 +248,7 @@ class AllThePonies {
             }
         }
 
-        this.createNameMap()
+        this.update()
     }
 }
 
