@@ -204,9 +204,17 @@ class AllThePonies {
             let pony = nameId in this.altNames ? this.altNames[nameId] : this.ponyNameMap[nameId]
             if (!(this.guessedPonies.includes(pony.id))) {
                 this.guessedPonies.push(pony.id)
-                let nameElement = $('<div>')
-                    .addClass('pony-name')
-                    .text(pony.name)
+                let nameElement = $('<div>', {
+                    class: 'pony-name',
+                }).append(
+                    $('<img>', {
+                        class: 'name-image',
+                        src: `./assets/images/ponies/portrait/${pony.id}.png`,
+                    }),
+                    $('<span>', {
+                        text: pony.name,
+                    })
+                )
                 this.ponyListElement.append(nameElement)
                 nameElement[0].scrollIntoView()
                 this.nameInput.val('')
@@ -229,7 +237,7 @@ class AllThePonies {
 
         
         this.languageSelector[0].disabled = true
-        this.timerElement[0].innerText = '0:00'
+        this.timerElement.text('0:00')
         this.updateProgress()
         this.startTime = new Date().getTime()
         this._timerInterval = setInterval(this.timerHandler, 1000)

@@ -245,7 +245,18 @@ main {
 #game {
     display: flex;
     flex-direction: column;
-    min-height: calc(100dvh - 0.5rem);
+    min-height: 100dvh;
+}
+
+#ponies-list-container {
+
+    /* background-color: red; */
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    margin-block: 0.2em;
 }
 
 #ponies-list {
@@ -256,19 +267,25 @@ main {
     display: flex;
     flex-direction: column-reverse;
     /* background-color: pink; */
-}
-
-#ponies-list-container {
-
-    /* background-color: red; */
-    height: 100%;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+    gap: 0.2em;
 }
 
 #game:has(#stop:disabled) #ponies-list {
     flex-direction: column;
+}
+
+.pony-name {
+    color: var(--pink);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.pony-name .name-image {
+    width: 2rem;
+    height: 2rem;
+    aspect-ratio: 1 / 1;
 }
 
 @media (max-width: 600px) {
@@ -302,10 +319,6 @@ main {
     #ponies-list-container {
         flex-direction: column-reverse;
     }
-}
-
-.pony-name {
-    color: var(--pink);
 }
 
 .dialog {

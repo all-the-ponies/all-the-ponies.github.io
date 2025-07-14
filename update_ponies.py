@@ -5,6 +5,7 @@ import os
 from typing import Any
 from typing import Iterable, Optional, Sequence, Union
 import urllib.parse
+from datetime import datetime, timedelta
 
 import charset_normalizer
 import requests
@@ -17,10 +18,16 @@ from rich.progress import (
     TextColumn,
     TimeRemainingColumn,
 )
+from rich.console import Console
+console = Console()
+
+from PIL import Image
+from crop import crop_image
 
 from luna_kit.gameobjectdata import GameObject, GameObjectData
 from luna_kit.loc import LOC
 from luna_kit.xml import parse_xml
+from luna_kit.pvr import PVR
 
 IGNORED_PONIES = [
     'Pony_Derpy', # derpy box, not playable muffins
@@ -49,10 +56,23 @@ IGNORED_PONIES = [
     'Pony_Bad_Apple_Hidden',
     'Pony_Nirik_Hidden',
     'Pony_Parasol_UPD81',
-
 ]
 
-WIKI_URL = 'https://mlp-game-wiki.no/index.php/'
+WIKI_URLS = {
+    'indie': 'https://mlp-game-wiki.no/index.php/',
+    'fandom': 'https://mlp-gameloft.fandom.com/wiki/',
+}
+
+WIKI_PAGES = {
+    'indie': {
+        'page': '{name}',
+        '2d_image': 'File:{name}_2d.png',
+        'portrait': 'File:{name}_portrait.png',
+    },
+    'fandom': {
+        'page': '{name}',
+    }
+}
 
 LOCATIONS = {
     0: 'PONYVILLE',
@@ -76,6 +96,7 @@ def track(
         MofNCompleteColumn(),
         TimeRemainingColumn(),
         transient = transient,
+        console = console,
     )
 
     with progress:
@@ -83,6 +104,45 @@ def track(
             sequence = sequence,
             description = description,
         )
+
+def check_wiki(name: str, result: Optional[dict] = None, check: bool = False):
+    if not isinstance(result, dict):
+        result = {}
+    
+    
+    for wiki, wiki_url in WIKI_URLS.items():
+        if not wiki_url.endswith('/') and not wiki_url.endswith('\\'):
+            wiki_url += '/'
+        
+        wiki_result = result.setdefault(wiki, {})
+        for page, url_template in WIKI_PAGES[wiki].items():
+            page_result: dict = wiki_result.setdefault(page, {
+                'exists': False,
+                'redirect': False,
+                'path': url_template.format(name = name),
+            })
+            if check and (not page_result.get('exists', False) or page_result.get('redirect', False)):
+                page_result['path'] = url_template.format(name = name)
+                url = wiki_url + page_result.get('path', url_template.format(name = name))
+
+                if (datetime.now() - datetime.fromtimestamp(page_result.get('timestamp', 0))) < timedelta(days = 1):
+                    console.print(f'skipping {url}')
+                    continue
+                    
+                response = requests.head(url)
+                if response.status_code == 301:
+                    page_result['exists'] = True
+                    page_result['redirect'] = True
+                elif response.status_code == 200:
+                    page_result['exists'] = True
+                    page_result['redirect'] = False
+                else:
+                    page_result['exists'] = False
+                    page_result['redirect'] = False
+                    page_result['timestamp'] = datetime.now().timestamp()
+                    console.print(f'[red]no page for [blue]{url}[/]')
+        
+    return result
 
 def add_translation(key: str, pony_info: dict, loc_files: list[LOC], type: str = 'name', locked: bool = False):
     unknown_name = False
@@ -102,6 +162,11 @@ def add_translation(key: str, pony_info: dict, loc_files: list[LOC], type: str =
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
+        '-v', '--version',
+        help = 'Game version',
+    )
+
+    argparser.add_argument(
         '-g', '--game-folder',
         help = 'Game folder',
         required = True,
@@ -110,7 +175,19 @@ def main():
     argparser.add_argument(
         '-o', '--output',
         help = 'Output json file',
-        default = 'assets/json/ponies.json',
+        default = 'assets/json/game-data.json',
+    )
+
+    argparser.add_argument(
+        '-a', '--assets',
+        help = 'Assets output folder',
+        default = 'assets/images/',
+    )
+
+    argparser.add_argument(
+        '-ni', '--no-images',
+        action = 'store_true',
+        help = "Don't get images",
     )
 
     argparser.add_argument(
@@ -119,47 +196,55 @@ def main():
         action = 'store_true',
     )
 
-    argparser.add_argument(
-        '-u', '--wiki-url',
-        help = 'Base wiki url',
-        default = WIKI_URL,
-    )
-
     args = argparser.parse_args()
 
     output = os.path.abspath(args.output)
-
-    wiki_url = args.wiki_url
-    if not wiki_url.endswith('/') and not wiki_url.endswith('\\'):
-        wiki_url += '/'
-
-    ponies = {}
+    assets_folder = args.assets
     
+    game_info = {}
+
     if os.path.exists(output):
-        print(f'Loading {os.path.basename(output)}')
+        console.print(f'Loading {os.path.basename(output)}')
         encoding = charset_normalizer.from_path(output).best().encoding
         with open(output, 'r', encoding = encoding) as file:
-            ponies = json.load(file)
-        if not isinstance(ponies, dict):
-            ponies = {}
+            game_info = json.load(file)
+        if not isinstance(game_info, dict):
+            game_info = {}
+
+    ponies = game_info.setdefault('ponies', {})
+    
+    if not game_info.get('file_version'):
+        ponies = game_info
+        game_info = {
+            'file_version': 1,
+            'ponies': ponies,
+        }
+    
+    game_info['file_version'] = 1
     
     game_folder = os.path.abspath(args.game_folder)
 
-    print('Loading gameobjectdata.xml')
+    console.print('Loading gameobjectdata.xml')
     gameobjectdata: GameObjectData = GameObjectData(os.path.join(game_folder, 'gameobjectdata.xml'))
 
-    print('Loading loc files')
+    console.print('Loading loc files')
     loc_files: list[LOC] = [
         LOC(filename) for filename in glob(os.path.join(game_folder, '*.loc'))
     ]
 
     if len(loc_files) == 0:
-        print('Could not find loc files')
+        console.print('Could not find loc files')
         return
 
-    print('Getting version')
-    version = parse_xml(os.path.join(game_folder, 'data_ver.xml'))[0].attrib['Value']
+    console.print('Getting version')
+    content_version = parse_xml(os.path.join(game_folder, 'data_ver.xml'))[0].attrib['Value']
 
+    if args.version:
+        game_info['game_version'] = args.version
+    else:
+        game_info['game_version'] = content_version
+    
+    game_info['content_version'] = content_version
 
     # print('Gathering ponies')
 
@@ -169,6 +254,11 @@ def main():
         print('Could not find Pony category in gameobjectdata.xml')
         return
     
+    os.makedirs(os.path.dirname(output), exist_ok = True)
+    # Do an initial save
+    with open(output, 'w', encoding = 'utf-8') as file:
+        json.dump(game_info, file, indent = 2, ensure_ascii = False)
+        
     for pony_obj in track(
         pony_category.values(),
         description = 'Gathering ponies...',
@@ -205,10 +295,36 @@ def main():
                 pony_info.get('locked', False),
             )
 
+            shop_image_name = pony_obj.get('Shop', {}).get('Icon')
+            if shop_image_name is not None and os.path.exists(shop_image_path := os.path.join(game_folder, shop_image_name)):
+                shop_image = Image.open(shop_image_path)
+                shop_image = crop_image(shop_image)
+                shop_image.save(os.path.join(assets_folder, 'ponies', 'shop', f'{pony_obj.id}.png'))
+            else:
+                console.print(f'could not find {pony_obj.id} image')
+                
+            
+            portrait_image_name = pony_obj.get('Icon', {}).get('Url')
+            portrait_image_path = os.path.join(game_folder, portrait_image_name)
+            portrait_image = None
+            if portrait_image_name is not None:
+                if os.path.exists(portrait_image_path + '.png'):
+                    portrait_image = Image.open(portrait_image_path + '.png')
+                elif os.path.exists(portrait_image_path + '.pvr'):
+                    portrait_image = PVR(portrait_image_path + '.pvr', external_alpha = True).image
+                else:
+                    console.print(f'could not find {pony_obj.id} portrait')
+            
+                if portrait_image is not None:
+                    portrait_image = crop_image(portrait_image)
+                    portrait_image.save(os.path.join(assets_folder, 'ponies', 'portrait', f'{pony_obj.id}.png'))
+            else:
+                console.print(f'could not find {pony_obj.id} portrait')
+
+            
+
             changeling = pony_obj.get('IsChangelingWithSet', {}).get('AltPony', None)
             if changeling:
-                if changeling == 'None':
-                    print(pony_obj.id, changeling)
                 pony_info['changeling'] = {
                     'id': changeling,
                     'IamAlt': pony_obj.get('IsChangelingWithSet', {}).get('IAmAlterSet', 0) == 1,
@@ -217,24 +333,31 @@ def main():
                 del pony_info['changeling']
 
             wiki_path = urllib.parse.quote(pony_info['name'].get('english', '').replace(' ', '_'))
-            wiki_path = pony_info.setdefault('wiki', wiki_path)
 
-            if args.wiki_status:
-                response = requests.head(wiki_url + wiki_path)
-                if response.status_code not in [200, 301]:
-                    print(f'No page for {pony_info['name'].get('english', pony_obj.id)}')
-                    print(response.url)
-                
-                    pony_info['wiki_exists'] = False
+            if isinstance(pony_info.get('wiki'), str):
+                pony_info['wiki_path'] = pony_info['wiki']
+                del pony_info['wiki']
+            
+            wiki_path = pony_info.setdefault('wiki_path', wiki_path)
+            # return
+            pony_info['wiki'] = check_wiki(
+                wiki_path,
+                pony_info.get('wiki'),
+                args.wiki_status,
+            )
+
+            if 'wiki_exists' in pony_info:
+                del pony_info['wiki_exists']
+            
         except Exception as e:
+            with open(output, 'w', encoding = 'utf-8') as file:
+                json.dump(game_info, file, indent = 2, ensure_ascii = False)
             e.add_note(f'id: {pony_obj.id}')
             raise e
-
-
-    print(f'saving {os.path.basename(output)}')
-    os.makedirs(os.path.dirname(output), exist_ok = True)
+        
+    console.print('saving game data')
     with open(output, 'w', encoding = 'utf-8') as file:
-        json.dump(ponies, file, indent = 2, ensure_ascii = False)
+        json.dump(game_info, file, indent = 2, ensure_ascii = False)
     
     print('Done!')
 
