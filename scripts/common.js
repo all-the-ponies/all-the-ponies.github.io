@@ -87,3 +87,13 @@ export function capitalize(str) {
 export function toTitleCase(str) {
   return str.split(' ').map(capitalize).join(' ')
 }
+
+export function scrollIntoViewWithOffset(element, offset, behavior = 'instant') {
+  window.scrollTo({
+    behavior: behavior,
+    top:
+      element.getBoundingClientRect().top -
+      document.body.getBoundingClientRect().top -
+      offset,
+  })
+}

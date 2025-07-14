@@ -245,7 +245,7 @@ main {
 #game {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
+    min-height: calc(100dvh - 0.5rem);
 }
 
 #ponies-list-container {
@@ -256,7 +256,6 @@ main {
     display: flex;
     flex-direction: column;
 
-    margin-block: 0.2em;
 }
 
 #ponies-list {
@@ -268,6 +267,7 @@ main {
     flex-direction: column-reverse;
     /* background-color: pink; */
     gap: 0.2em;
+    margin-block: 0.3rem;
 }
 
 #game:has(#stop:disabled) #ponies-list {
@@ -291,6 +291,7 @@ main {
 @media (max-width: 600px) {
     #game {    
         flex-direction: column-reverse;
+        min-height: 100dvh;
     }
 
     #game-bar {

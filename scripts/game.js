@@ -1,4 +1,4 @@
-import { loadJSON, normalize, fixName, LOC, toTitleCase } from './common.js'
+import { loadJSON, normalize, fixName, LOC, toTitleCase, scrollIntoViewWithOffset } from './common.js'
 import './jquery-3.7.1.min.js'
 
 class AllThePonies {
@@ -216,7 +216,10 @@ class AllThePonies {
                     })
                 )
                 this.ponyListElement.append(nameElement)
-                nameElement[0].scrollIntoView()
+                scrollIntoViewWithOffset(
+                    nameElement[0],
+                    this.gameBar.height() + Number(getComputedStyle(game.ponyListElement[0]).marginTop.replace('px', '')),
+                )
                 this.nameInput.val('')
                 this.updateProgress()
             }
