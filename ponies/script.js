@@ -24,9 +24,10 @@ class App {
 
     createPonyCard(ponyId) {
         let pony = this.gameData.getPony(ponyId)
-        let card = $('<div>', {
+        let card = $('<a>', {
             class: 'pony-card',
             id: ponyId,
+            href: `#${ponyId}`,
         }).append(
             $('<div>', {
                 class: 'pony-name',

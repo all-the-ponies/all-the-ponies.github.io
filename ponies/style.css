@@ -43,6 +43,7 @@
 
     cursor: pointer;
     container-type: inline-size;
+    text-decoration: none;
 }
 
 .pony-card .pony-name {
