@@ -84,6 +84,27 @@ LOCATIONS = {
     6: 'KLUGETOWN',
 }
 
+PRIZE_TYPES = {
+    'XP': 'XP',
+    'Bits': 'Bits',
+    'Gems': 'Gems',
+    'MinecartWheel_StarMastery': 'Minecart_Wheel',
+    'MinecartWheel': 'Minecart_Wheel',
+    'LoyaltyShard': 'Loyalty_Shard',
+    'KindnessShard': 'Kindness_Shard',
+    'LaughterShard': 'Laughter_Shard',
+    'GenerosityShard': 'Generosity_Shard',
+    'HonestyShard': 'Honesty_Shard',
+    'MagicShard': 'Magic_Shard',
+    'PopCurrency1': 'Pin',
+    'PopCurrency2': 'Button',
+    'PopCurrency3': 'Twine',
+    'PopCurrency4': 'Ribbon',
+    'PopCurrency5': 'Bow',
+    'Token_Lottery': 'Lucky_Coin',
+    'Token_CE_Lottery': 'Crystal_Coin',
+}
+
 def track(
     sequence: Union[Iterable[ProgressType], Sequence[ProgressType]],
     total: Optional[float] = None,
@@ -157,7 +178,16 @@ def add_translation(key: str, pony_info: dict, loc_files: list[LOC], type: str =
                 print(f'new: {name}')
                 print(f"old: {pony_info[type][lang].replace('|', '')}")
             pony_info[type][lang] = name
-        
+
+
+def translate(key: str, loc_files: list[LOC]) -> dict[str, str]:
+    result = {}
+    for loc in loc_files:
+        lang = loc['DEV_ID'].lower()
+        result[lang] = loc.translate(key)
+    
+    return result
+
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -181,7 +211,7 @@ def main():
     argparser.add_argument(
         '-a', '--assets',
         help = 'Assets output folder',
-        default = 'assets/images/',
+        default = 'assets',
     )
 
     argparser.add_argument(
@@ -199,7 +229,7 @@ def main():
     args = argparser.parse_args()
 
     output = os.path.abspath(args.output)
-    assets_folder = args.assets
+    ASSETS_FOLDER = args.assets
     
     game_info = {}
 
@@ -246,6 +276,42 @@ def main():
     
     game_info['content_version'] = content_version
 
+    # Gather prize types
+
+    prizetypes_info = game_info.setdefault('prizes', {})
+    with open(os.path.join(game_folder, 'prizetype.json'), 'r') as file:
+        prizetypes = json.load(file)
+    
+    os.makedirs(os.path.join(ASSETS_FOLDER, 'images', 'prizes'), exist_ok = True)
+    for prize, prize_id in PRIZE_TYPES.items():
+        if prize not in prizetypes['PrizeData']:
+            prize_obj = gameobjectdata.get_object(prize)
+
+            if prize_obj is not None and prize_obj.category == 'QuestSpecialItem':
+                prize_game_info = {
+                    'loc_string': prize_obj.get('QuestSpecialItem', {}).get('Name', ''),
+                    'image': prize_obj.get('QuestSpecialItem', {}).get('Icon', '')
+                }
+            else:
+                raise ValueError(f'Cannot find {prize}')
+        else:
+            prize_game_info = prizetypes['PrizeData'][prize]
+        
+        image = crop_image(Image.open(os.path.join(game_folder, prize_game_info['image'])))
+        prize_image_path = os.path.join(ASSETS_FOLDER, 'images', 'prizes', f'{prize_id}.png')
+        image.save(prize_image_path)
+        
+        prize_info = {
+            'name': translate(prize_game_info['loc_string'], loc_files),
+        }
+
+        prizetypes_info[prize_id] = prize_info
+    
+    PRIZES_MAP = {}
+    for prize_id, prize_aliases in prizetypes['PrizeStrings'].items():
+        for alias in prize_aliases:
+            PRIZES_MAP[alias] = prize_id
+
     # print('Gathering ponies')
 
     pony_category = gameobjectdata.get('Pony')
@@ -274,6 +340,7 @@ def main():
                 pony_obj.get('House', {}).get('HomeMapZone', ''),
                 'UNKNOWN',
             )
+            pony_info['house'] = pony_obj.get('House', {}).get('Type')
 
             name_id = pony_obj.get('Name', {}).get('Unlocal', '')
             description_id = pony_obj.get('Description', {}).get('Unlocal', '')
@@ -295,31 +362,32 @@ def main():
                 pony_info.get('locked', False),
             )
 
-            shop_image_name = pony_obj.get('Shop', {}).get('Icon')
-            if shop_image_name is not None and os.path.exists(shop_image_path := os.path.join(game_folder, shop_image_name)):
-                shop_image = Image.open(shop_image_path)
-                shop_image = crop_image(shop_image)
-                shop_image.save(os.path.join(assets_folder, 'ponies', 'shop', f'{pony_obj.id}.png'))
-            else:
-                console.print(f'could not find {pony_obj.id} image')
+            if not args.no_images:
+                shop_image_name = pony_obj.get('Shop', {}).get('Icon')
+                if shop_image_name is not None and os.path.exists(shop_image_path := os.path.join(game_folder, shop_image_name)):
+                    shop_image = Image.open(shop_image_path)
+                    shop_image = crop_image(shop_image)
+                    shop_image.save(os.path.join(ASSETS_FOLDER, 'images', 'ponies', 'shop', f'{pony_obj.id}.png'))
+                else:
+                    console.print(f'could not find {pony_obj.id} image')
+                    
                 
-            
-            portrait_image_name = pony_obj.get('Icon', {}).get('Url')
-            portrait_image_path = os.path.join(game_folder, portrait_image_name)
-            portrait_image = None
-            if portrait_image_name is not None:
-                if os.path.exists(portrait_image_path + '.png'):
-                    portrait_image = Image.open(portrait_image_path + '.png')
-                elif os.path.exists(portrait_image_path + '.pvr'):
-                    portrait_image = PVR(portrait_image_path + '.pvr', external_alpha = True).image
+                portrait_image_name = pony_obj.get('Icon', {}).get('Url')
+                portrait_image_path = os.path.join(game_folder, portrait_image_name)
+                portrait_image = None
+                if portrait_image_name is not None:
+                    if os.path.exists(portrait_image_path + '.png'):
+                        portrait_image = Image.open(portrait_image_path + '.png')
+                    elif os.path.exists(portrait_image_path + '.pvr'):
+                        portrait_image = PVR(portrait_image_path + '.pvr', external_alpha = True).image
+                    else:
+                        console.print(f'could not find {pony_obj.id} portrait')
+                
+                    if portrait_image is not None:
+                        portrait_image = crop_image(portrait_image)
+                        portrait_image.save(os.path.join(ASSETS_FOLDER, 'assets', 'ponies', 'portrait', f'{pony_obj.id}.png'))
                 else:
                     console.print(f'could not find {pony_obj.id} portrait')
-            
-                if portrait_image is not None:
-                    portrait_image = crop_image(portrait_image)
-                    portrait_image.save(os.path.join(assets_folder, 'ponies', 'portrait', f'{pony_obj.id}.png'))
-            else:
-                console.print(f'could not find {pony_obj.id} portrait')
 
             
 
@@ -327,10 +395,47 @@ def main():
             if changeling:
                 pony_info['changeling'] = {
                     'id': changeling,
-                    'IamAlt': pony_obj.get('IsChangelingWithSet', {}).get('IAmAlterSet', 0) == 1,
+                    'IAmAlterSet': pony_obj.get('IsChangelingWithSet', {}).get('IAmAlterSet', 0) == 1,
                 }
             elif 'changeling' in pony_info:
                 del pony_info['changeling']
+
+
+            # star rewards
+
+            pony_info['max_level'] = pony_obj.get('AI', {}).get('Max_Level', 0) == 1
+
+
+            star_rewards = []
+
+            for prize_id, amount in zip(
+                pony_obj.get('StarRewards', {}).get('ID', []),
+                pony_obj.get('StarRewards', {}).get('Amount', []),
+            ):
+                prize_id = PRIZES_MAP.get(prize_id, prize_id)
+                prize_id = PRIZE_TYPES.get(prize_id, prize_id)
+
+                star_rewards.append({
+                    'item': prize_id,
+                    'amount': amount,
+                })
+            
+            pony_info['rewards'] = star_rewards
+
+            # extra metadata
+            
+            minigames = pony_info.setdefault('minigames', {})
+            minigames['can_play_minecart'] = pony_obj.get('Minigames', {}).get('CanPlayMineCart', 1) == 1
+            minigames['minigame_cooldown'] = pony_obj.get('Minigames', {}).get('TimeBetweenPlayActions', 0)
+            minigames['minigame_skip_cost'] = pony_obj.get('Minigames', {}).get('PlayActionSkipAgainCost', 0)
+            minigames['exp_rank'] = pony_obj.get('Minigames', {}).get('EXP_Rank', 0) # Not sure what this is, but I'll keep it
+
+            pony_info['arrival_xp'] = pony_obj.get('OnArrive', {}).get('EarnXP', 0)
+
+
+
+
+            # wiki stuff
 
             wiki_path = urllib.parse.quote(pony_info['name'].get('english', '').replace(' ', '_'))
 
@@ -339,7 +444,6 @@ def main():
                 del pony_info['wiki']
             
             wiki_path = pony_info.setdefault('wiki_path', wiki_path)
-            # return
             pony_info['wiki'] = check_wiki(
                 wiki_path,
                 pony_info.get('wiki'),
