@@ -23,6 +23,15 @@ class App {
             this.updateSearch()
         })
 
+        this.searchBar.on('input', () => this.updateSearch())
+
+        this.createSearchCards()
+
+        let searchQuery = new URLSearchParams(location.search).get('q')
+        if (searchQuery != null) {
+            this.searchBar.val(decodeURI(searchQuery))
+        }
+
         if (this.gameData.getPony(urlHash) != null) {
             console.log(this.gameData.getPony(urlHash))
             this.showPonyProfile(urlHash)
@@ -71,17 +80,41 @@ class App {
         this.ponyProfileSection.css('display', 'none')
     }
 
+    createSearchCards() {
+        this.searchResultsElement.empty()
+        
+        for (let ponyId of Object.keys(this.gameData.gameData.ponies)) {
+            if ($(`#${ponyId}`).length == 0) {
+                // console.log('does not exist', $(`#${ponyId}`).length )
+                this.searchResultsElement.append(this.createPonyCard(ponyId))
+            }
+        }
+    }
+
     updateSearch() {
         this.showSearch()
-        this.searchResultsElement.empty()
-        let i = 0
-        for (let ponyId of Object.keys(this.gameData.gameData.ponies)) {
-            this.searchResultsElement.append(this.createPonyCard(ponyId))
-            // i += 1
-            // if (i > 10) {
-            //     break
-            // }
+
+        const url = new URL(location.origin + location.pathname)
+        const urlParams = new URLSearchParams();
+        urlParams.set('q', encodeURIComponent(this.searchBar.val()))
+        url.search = urlParams
+        if (history && history.replaceState) {
+            history.replaceState("", "", url.toString());
+        } else {
+            location.href = url.toString();
         }
+
+
+        let searchResults = this.gameData.searchName(this.searchBar.val())
+        console.log(searchResults)
+
+        this.searchResultsElement.children().each(function () {
+            if (!searchResults.includes(this.id)) {
+                $(this).css('display', 'none')
+            } else {
+                $(this).css('display', 'block')
+            }
+        })
     }
 
     showPonyProfile(ponyId) {

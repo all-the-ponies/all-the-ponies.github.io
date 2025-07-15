@@ -156,6 +156,25 @@ export default class GameData {
         return null
     }
 
+    searchName(name) {
+        name = this.transformName(name)
+        if (name == '') {
+            return Object.keys(this.gameData.ponies)
+        }
+        let result = []
+        for (let [nameId, pony] of Object.entries(this.ponyNameMap)) {
+            if (nameId.includes(name)) {
+                result.push(pony.id)
+            }
+        }
+        for (let [nameId, pony] of Object.entries(this.altPonyNames)) {
+            if (nameId.includes(name) && !result.includes(pony.id)) {
+                result.push(pony.id)
+            }
+        }
+        return result
+    }
+
     getPony(ponyId, usedName = null) {
         if (typeof this.gameData.ponies[ponyId] == 'undefined') {
             return null
