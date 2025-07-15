@@ -42,6 +42,8 @@ if __name__ == "__main__":
     for file in files:
         try:
             image = Image.open(file)
+            image = crop_image(image)
+            image.save(file)
         except Exception as e:
             print(e)
 
