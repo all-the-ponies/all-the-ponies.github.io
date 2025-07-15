@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+    <title>All The Ponies</title>
+    <meta name="apple-mobile-web-app-title" content="Ponies" />
+    <meta name="description" content="See how many ponies you can name">
+    <meta name="keywords" content="my little pony,mlp,pony,ponies,quiz,names,name,gameloft,magic princess,g4,friendship is magic,fim">
+
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <!-- <link rel="icon" type="image/svg+xml" href="./favicon/favicon.svg" /> -->
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    
+    <meta property="og:image" content="/favicon/favicon.png" />
+
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="module" src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header">
+            <h1>All The Ponies</h1>
+            <select name="language" id="language">
+                <option value="english" selected>English</option>
+                <option value="arabic">Arabic</option>
+                <option value="chinese">Chinese</option>
+                <option value="french">French</option>
+                <option value="german">German</option>
+                <option value="italian">Italian</option>
+                <option value="japanese">Japanese</option>
+                <option value="korean">Korean</option>
+                <option value="brazilian portuguese">Brazilian Portuguese</option>
+                <option value="russian">Russian</option>
+                <option value="spanish">Spanish</option>
+                <option value="thai">Thai</option>
+                <option value="turkish">Turkish</option>
+            </select>
+        </div>
+    </header>
+    <main>
+        <div class="search-container">
+            <label for="search">Search</label>
+            <input type="search" name="search" id="search" placeholder="Pony">
+        </div>
+        <section id="search-results">
+            <!-- <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Russet-Maned Future Townspony</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div>
+            <div class="pony-card">
+                <div class="pony-name">Pony name</div>
+                <div class="pony-card-body">
+                    <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+                </div>
+            </div> -->
+        </section>
+    </main>
+    
+    <dialog id="options-dialog" class="dialog">
+        <h1 class="dialog-header">Options</h1>
+        <div class="dialog-body">
+            <form action="dialog">
+                <div class="form-options">
+                    <!-- <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
+                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
+                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
+                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div> -->
+                </div>
+                <div class="dialog-confirmation">
+                    <button class="button-red" type="submit" value="cancel" formmethod="dialog">Cancel</button>
+                    <button class="button-green" type="submit" value="ok" formmethod="dialog">OK</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <template id="pony-card">
+        <style>
+
+        </style>
+        <div class="pony-card">
+            <div class="pony-name">Pony name</div>
+            <div class="pony-card-body">
+                <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
+            </div>
+        </div>
+    </template>
+</body>
+</html>
