@@ -40,6 +40,7 @@ class App {
                     class: 'pony-image',
                     src: `/assets/images/ponies/shop/${pony.id}.png`,
                     loading: 'lazy',
+                    alt: pony.name[this.language],
                 })
             )
         )
