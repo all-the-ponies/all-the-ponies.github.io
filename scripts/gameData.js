@@ -157,6 +157,9 @@ export default class GameData {
     }
 
     getPony(ponyId, usedName = null) {
+        if (typeof this.gameData.ponies[ponyId] == 'undefined') {
+            return null
+        }
         return {
             ...structuredClone(this.gameData.ponies[ponyId]),
             id: ponyId,

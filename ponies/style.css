@@ -15,7 +15,7 @@
     text-align: center;
 }
 
-#search {
+#search-bar {
     margin: 0;
 }
 
@@ -73,4 +73,44 @@
     object-fit: contain;
     object-position: center;
     padding: 1rem;
+}
+
+/* pony profile */
+
+#pony-profile {
+    display: none; /* set to block in js */
+}
+
+
+/* start */
+
+.stars {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.star {
+    background-color: #8A2D48;
+    width: 1rem;
+    aspect-ratio: 1 / 1;
+
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+
+    position: relative;
+
+    border: none;
+}
+
+.star::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #FFF53A;
+}
+
+.star[data-filled="0"]::after {
+    display: none;
 }
