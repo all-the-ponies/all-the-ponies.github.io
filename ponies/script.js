@@ -75,12 +75,8 @@ class App {
         this.gameData.language = this.language
         this.gameData.updatePonies()
 
-        if (!window.location.hash) {
-            this.currentScreen = 'search'
-        }
-
         if (this.currentScreen == 'ponyProfile') {
-            this.showPonyProfile(location.hash.replace('#', ''))
+            this.showPonyProfile(getUrlParameter('pony'))
         }
         this.createSearchCards()
         if (this.currentScreen == 'search') {
