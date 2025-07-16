@@ -1,3 +1,4 @@
+import { getUrlParameter, setUrlParameter } from "../scripts/common.js";
 import GameData from "../scripts/gameData.js";
 import '../scripts/jquery-3.7.1.min.js'
 
@@ -9,6 +10,8 @@ class App {
         this.searchBar = $('#search-bar')
         this.searchResultsElement = $('#search-results')
 
+        this.searchCreated = false
+
         this.currentScreen = 'search'
 
         this.languageSelector.on('change', () => this.update())
@@ -17,32 +20,22 @@ class App {
         
         this.filters = {}
 
-        let urlHash = location.hash.replace('#', '')
+        let selectedPony = getUrlParameter('pony')
 
         $('.to-search').on('click', (e) => {
             e.preventDefault()
-            location.hash = ''
+            setUrlParameter('pony')
             this.updateSearch()
+        })
+
+        window.addEventListener('popstate', (e) => {
+            console.log(e)
+            this.reload()
         })
 
         this.searchBar.on('input', () => this.updateSearch())
 
-        if (this.gameData.getPony(urlHash) != null) {
-            console.log(this.gameData.getPony(urlHash))
-            this.showPonyProfile(urlHash)
-        }
-
-        this.createSearchCards()
-
-        let searchQuery = new URLSearchParams(location.search).get('q')
-        if (searchQuery != null) {
-            this.searchBar.val(decodeURI(searchQuery))
-            
-        }
-
-        if (this.currentScreen == 'search') {
-            this.updateSearch()
-        }
+        this.reload()
     }
 
     get language() {
@@ -53,9 +46,39 @@ class App {
         this.languageSelector.val(lang)
     }
 
+    reload() {
+        console.log('reloading')
+        let selectedPony = getUrlParameter('pony')
+        
+        if (selectedPony) {
+            this.currentScreen = 'ponyProfile'
+            this.showPonyProfile(selectedPony)
+        } else {
+            this.currentScreen = 'search'
+        }
+
+        const searchQuery = getUrlParameter('q')
+        if (searchQuery != null) {
+            this.searchBar.val(searchQuery)
+        }
+
+        if (!this.searchCreated) {
+            this.createSearchCards()
+        }
+
+        if (this.currentScreen == 'search') {
+            this.updateSearch()
+        }
+    }
+
     update() {
         this.gameData.language = this.language
         this.gameData.updatePonies()
+
+        if (!window.location.hash) {
+            this.currentScreen = 'search'
+        }
+
         if (this.currentScreen == 'ponyProfile') {
             this.showPonyProfile(location.hash.replace('#', ''))
         }
@@ -70,7 +93,7 @@ class App {
         let card = $('<a>', {
             class: 'pony-card',
             id: ponyId,
-            href: `#${ponyId}`,
+            href: `?pony=${ponyId}`,
         }).append(
             $('<div>', {
                 class: 'pony-name',
@@ -86,7 +109,11 @@ class App {
                     alt: pony.name[this.language],
                 })
             )
-        ).on('click', () => this.showPonyProfile(pony.id))
+        ).on('click', (e) => {
+            e.preventDefault()
+            setUrlParameter('pony', ponyId)
+            this.showPonyProfile(pony.id)
+        })
         return card
     }
 
@@ -105,25 +132,16 @@ class App {
                 this.searchResultsElement.append(this.createPonyCard(ponyId))
             }
         }
+        this.searchCreated = true
     }
 
     updateSearch() {
         this.showSearch()
 
-        const url = new URL(location.origin + location.pathname)
-        const urlParams = new URLSearchParams();
-        if (this.searchBar.val()) {
-            urlParams.set('q', encodeURIComponent(this.searchBar.val()))
-        }
-        url.search = urlParams
-        if (history && history.replaceState) {
-            history.replaceState("", "", url.toString());
-        } else {
-            location.href = url.toString();
-        }
+        setUrlParameter('q', this.searchBar.val(), true)
 
 
-        let searchResults = this.gameData.searchName(this.searchBar.val())
+        let searchResults = this.gameData.searchName(this.searchBar.val(), true)
         // console.log(searchResults)
 
         this.searchResultsElement.children().each(function () {

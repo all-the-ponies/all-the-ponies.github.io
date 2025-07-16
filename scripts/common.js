@@ -97,3 +97,30 @@ export function scrollIntoViewWithOffset(element, offset, behavior = 'instant') 
       offset,
   })
 }
+
+export function setUrlParameter(param, value, replace = false) {
+    const url = new URL(location.href)
+    if (value) {
+      url.searchParams.set(param, encodeURIComponent(value))
+    } else {
+      url.searchParams.delete(param)
+    }
+
+    
+    if (history && history.replaceState) {
+      if (replace) {
+        history.replaceState("", "", url.toString());
+      } else {
+        history.pushState('', '', url.toString())
+      }
+    } else {
+        location.href = url.toString();
+    }
+}
+
+export function getUrlParameter(param) {
+    const url = new URL(location.href)
+    const value = url.searchParams.get(param)
+    console.log(value)
+  return value == null ? null : decodeURIComponent(value)
+}
