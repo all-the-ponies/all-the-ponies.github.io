@@ -10,6 +10,8 @@ class App {
         this.searchResultsElement = $('#search-results')
 
         this.currentScreen = 'search'
+
+        this.languageSelector.on('change', () => this.update())
         
         this.gameData = new GameData('/assets/json/game-data.json')
         
@@ -49,6 +51,18 @@ class App {
 
     set language(lang) {
         this.languageSelector.val(lang)
+    }
+
+    update() {
+        this.gameData.language = this.language
+        this.gameData.updatePonies()
+        if (this.currentScreen == 'ponyProfile') {
+            this.showPonyProfile(location.hash.replace('#', ''))
+        }
+        this.createSearchCards()
+        if (this.currentScreen == 'search') {
+            this.updateSearch()
+        }
     }
 
     createPonyCard(ponyId) {
@@ -121,7 +135,7 @@ class App {
 
     showPonyProfile(ponyId) {
         this.currentScreen = 'ponyProfile'
-        
+
         this.searchSection.css('display', 'none')
         this.ponyProfileSection.css('display', 'block')
 
