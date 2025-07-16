@@ -126,9 +126,9 @@ class App {
 
         this.searchResultsElement.children().each(function () {
             if (!searchResults.includes(this.id)) {
-                $(this).css('display', 'none')
+                this.style.display = 'none'
             } else {
-                $(this).css('display', 'block')
+                this.style.display = 'block'
             }
         })
     }
