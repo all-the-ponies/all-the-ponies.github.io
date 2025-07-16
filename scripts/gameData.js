@@ -226,4 +226,15 @@ export default class GameData {
             usedName: usedName,
         }
     }
+
+    getItem(itemId) {
+        if (typeof this.gameData.items[itemId] == 'undefined') {
+            return null
+        }
+        return {
+            ...structuredClone(this.gameData.items[itemId]),
+            id: itemId,
+            image: `/assets/images/items/${itemId}.png`,
+        }
+    }
 }

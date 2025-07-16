@@ -278,7 +278,7 @@ def main():
 
     # Gather prize types
 
-    prizetypes_info = game_info.setdefault('prizes', {})
+    prizetypes_info = game_info.setdefault('items', {})
     with open(os.path.join(game_folder, 'prizetype.json'), 'r') as file:
         prizetypes = json.load(file)
     
@@ -432,7 +432,10 @@ def main():
 
             pony_info['arrival_xp'] = pony_obj.get('OnArrive', {}).get('EarnXP', 0)
 
-
+            shopdata = gameobjectdata.get_object_shopdata(pony_obj.id)
+            pony_info.setdefault('unlock_level', 0)
+            if shopdata is not None:
+                pony_info['unlock_level'] = shopdata.get('UnlockValue', 0)
 
 
             # wiki stuff

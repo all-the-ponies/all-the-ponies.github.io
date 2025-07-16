@@ -1,4 +1,4 @@
-import { getUrlParameter, setUrlParameter } from "../scripts/common.js";
+import { getUrlParameter, LOC, setUrlParameter, toTitleCase } from "../scripts/common.js";
 import GameData from "../scripts/gameData.js";
 import '../scripts/jquery-3.7.1.min.js'
 
@@ -163,6 +163,31 @@ class App {
         console.log(pony.image.full)
         this.ponyProfileSection.find('#pony-profile-image').attr('src', pony.image.full)
         this.ponyProfileSection.find('#pony-profile-description').text(pony.description[this.language])
+        this.ponyProfileSection.find('[data-pony-info="level"]').text(pony.unlock_level)
+        this.ponyProfileSection.find('[data-pony-info="town"]').text(toTitleCase(LOC.translate(pony.location)))
+        this.ponyProfileSection.find('[data-pony-info="arrival-bonus"]').text(pony.arrival_xp)
+        this.ponyProfileSection.find('[data-pony-info="House"]').text(pony.house)
+        this.ponyProfileSection.find('[data-pony-info="minigame-cooldown"]').text(pony.minigames.minigame_cooldown + 's')
+        this.ponyProfileSection.find('[data-pony-info="minigame-skip-cost"]').text(pony.minigames.minigame_skip_cost)
+
+        let starRewardsElement = this.ponyProfileSection.find('[data-pony-info="star-rewards"]')
+        let starRewardsBar = starRewardsElement.find('.star-rewards-bar')
+        if (pony.rewards.length == 0) {
+            starRewardsBar.css('display', 'none')
+            starRewardsElement.find('.none-star-rewards').css('display', 'inline')
+        } else {
+            starRewardsBar.css('display', 'flex')
+            starRewardsElement.find('.none-star-rewards').css('display', 'none')
+            let i = 0
+            for (let i = 0; i < 5; i++) {
+                let reward = pony.rewards[i]
+                let item = this.gameData.getItem(reward.item)
+                let img = starRewardsBar.children().eq(i).find('img')
+                img.attr('src', item.image)
+            }
+        }
+        // this.ponyProfileSection.find('[data-pony-info="minigame-skip-cost"]').text(pony.minigames.minigame_skip_cost)
+
     }
 }
 
