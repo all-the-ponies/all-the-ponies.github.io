@@ -282,7 +282,7 @@ def main():
     with open(os.path.join(game_folder, 'prizetype.json'), 'r') as file:
         prizetypes = json.load(file)
     
-    os.makedirs(os.path.join(ASSETS_FOLDER, 'images', 'prizes'), exist_ok = True)
+    os.makedirs(os.path.join(ASSETS_FOLDER, 'images', 'items'), exist_ok = True)
     for prize, prize_id in PRIZE_TYPES.items():
         if prize not in prizetypes['PrizeData']:
             prize_obj = gameobjectdata.get_object(prize)
@@ -298,7 +298,7 @@ def main():
             prize_game_info = prizetypes['PrizeData'][prize]
         
         image = crop_image(Image.open(os.path.join(game_folder, prize_game_info['image'])))
-        prize_image_path = os.path.join(ASSETS_FOLDER, 'images', 'prizes', f'{prize_id}.png')
+        prize_image_path = os.path.join(ASSETS_FOLDER, 'images', 'items', f'{prize_id}.png')
         image.save(prize_image_path)
         
         prize_info = {
