@@ -112,7 +112,9 @@ class App {
 
         const url = new URL(location.origin + location.pathname)
         const urlParams = new URLSearchParams();
-        urlParams.set('q', encodeURIComponent(this.searchBar.val()))
+        if (this.searchBar.val()) {
+            urlParams.set('q', encodeURIComponent(this.searchBar.val()))
+        }
         url.search = urlParams
         if (history && history.replaceState) {
             history.replaceState("", "", url.toString());
