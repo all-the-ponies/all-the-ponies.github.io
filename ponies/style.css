@@ -48,6 +48,7 @@
 
 .pony-card .pony-name {
     font-size: 10cqw;
+    word-break: break-word;
 
     color: white;
     text-align: center;

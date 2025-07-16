@@ -79,7 +79,28 @@ section {
 .header {
     max-width: var(--page-width);
     margin: auto;
+}
 
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.navigation {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover, nav a:focus-visible {
+    color: var(--blue);
 }
 
 main {
