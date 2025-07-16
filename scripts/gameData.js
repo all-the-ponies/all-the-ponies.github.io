@@ -26,11 +26,9 @@ export default class GameData {
 
         this._language = 'english'
 
-        this.totalPonies = 0
-        this.ponyNameMap = {}
-        this.altPonyNames = {}
+        this.ponies = {}
 
-        this.update()
+        this.updatePonies()
     }
 
     get language() {
@@ -39,85 +37,85 @@ export default class GameData {
 
     set language(language) {
         this._language = language
-        this.update()
     }
 
-    update() {
-        if (this.options.includeUnused) {
-            if (!this.tags.includes('unused')) {
-                this.tags.push('unused')
-            }
-        } else {
-            if (this.tags.includes('unused')) {
-                this.tags.splice(this.tags.indexOf('unused'))
-            }
+    generateFilteredList(options = {
+            ignoreSpaces: true,
+            caseSensitive: false,
+            ignoreAccents: true,
+            ignorePunctuation: true,
+            includeUnused: true,
+        }) {
+        
+        options = {
+            ignoreSpaces: true,
+            caseSensitive: false,
+            ignoreAccents: true,
+            ignorePunctuation: true,
+            includeUnused: true,
+            ...options,
         }
 
-        console.log('tags', this.tags)
+        let result = {
+            namesMap: {},
+            altNames: {},
+            totalPonies: 0,
+        }
 
-        this.totalPonies = 0
-        this.ponyNameMap = {}
-        this.altPonyNames = {}
         for (let [ponyId, ponyInfo] of Object.entries(this.gameData.ponies)) {
-            if (typeof ponyInfo['tags'] != 'undefined' && ponyInfo['tags']) {
-                if (!ponyInfo['tags'].some(tag => this.tags.includes(tag))) {
-                    console.log(`${ponyId} not included`)
+            if (!options.includeUnused && ponyInfo.tags?.includes('unused')) {
+                console.log('skipping', ponyId)
+                continue
+            }
+
+            let name = fixName(ponyInfo.name[this.language])
+            let newName = name
+            let nameId = this.transformName(newName, options)
+
+            let isChangeling = !!ponyInfo.changeling?.id
+            if (nameId in result.namesMap) {
+                if (isChangeling) {
+                    console.log('is changeling', ponyId)
+                    continue
+                }
+
+                newName = `${name} (${toTitleCase(LOC.translate(ponyInfo.location))})`
+                nameId = this.transformName(newName, options)
+
+                if (nameId in result.namesMap) {
+                    console.log('duplicate found', ponyId, newName)
                     continue
                 }
             }
-            
-            let name = fixName(ponyInfo['name'][this.language])
-            let newName = name
 
-            let nameId = this.transformName(newName)
-
-            let isChangeling = 'changeling' in ponyInfo && (!!ponyInfo['changeling']['id'])
-            
-            // this.totalPonies += 1
-            // if (!(isChangeling && ponyInfo['changeling']['IamAlt'])) {
-            // }
-            
-            if (nameId in this.ponyNameMap) {
-                if (isChangeling) {
-                    if (name == this.gameData.ponies[ponyInfo['changeling']['id']]['name'][this.language]) {
-                        console.log('changeling detected', name)
-                        continue
-                    }
-                }
-
-                newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
-                nameId = this.transformName(newName)
-                console.log(ponyId, name, newName)
-                if (nameId in this.ponyNameMap) {
-                    console.log(ponyId, name, newName)
-                }
-            }
-
-            this.ponyNameMap[nameId] = {
+            result.namesMap[nameId] = {
                 id: ponyId,
                 name: newName,
             }
 
-            if (typeof ponyInfo['alt_name'] != 'undefined' && typeof ponyInfo['alt_name'][this.language] != 'undefined') {
-                for (let name of ponyInfo['alt_name'][this.language]) {
+            result.totalPonies += 1
+
+            if (typeof ponyInfo.alt_name != 'undefined' && typeof ponyInfo.alt_name[this.language] != 'undefined') {
+                for (let name of ponyInfo.alt_name[this.language]) {
                     newName = name
-                    nameId = this.transformName(fixName(name))
-                    if (nameId in this.altPonyNames) {
+                    nameId = this.transformName(newName, options)
+                    
+                    if (nameId in result.altNames) {
                         if (isChangeling) {
-                            if (name == this.ponyInfo[ponyInfo['changeling']['id']]['name'][this.language]) {
-                                console.log('changeling detected', name)
-                                continue
-                            }
+                            console.log('is changeling', ponyId)
+                            continue
                         }
 
-                        newName = `${name} (${toTitleCase(LOC.translate(ponyInfo['location']))})`
-                        nameId = this.transformName(newName)
-                        console.log(ponyId, name, newName)
-                        if (nameId in this.altPonyNames) {
-                            console.log(ponyId, name, newName)
+                        newName = `${name} (${toTitleCase(LOC.translate(ponyInfo.location))})`
+                        nameId = this.transformName(newName, options)
+
+                        if (nameId in result.altNames) {
+                            console.log('duplicate found', ponyId, newName)
+                            continue
                         }
                     }
-                    this.altPonyNames[nameId] = {
+
+                    result.altNames[nameId] = {
                         id: ponyId,
                         name: newName,
                     }
@@ -125,21 +123,70 @@ export default class GameData {
             }
         }
 
-        this.totalPonies = Object.keys(this.ponyNameMap).length
+        return result
     }
 
-    transformName(name) {
-        if (!this.options.caseSensitive) {
+    updatePonies() {
+        this.ponies = {}
+
+        for (let [ponyId, ponyInfo] of Object.entries(this.gameData.ponies)) {
+            let searchNames = [
+                this.transformName(
+                    fixName(ponyInfo.name[this.language])
+                )
+            ]
+
+            if ('alt_name' in ponyInfo && this.language in ponyInfo.alt_name) {
+                for (let altName of ponyInfo.alt_name[this.language]) {
+                    console.log(altName)
+                    searchNames.push(
+                        this.transformName(
+                            fixName(altName)
+                        )
+                    )
+                }
+            }
+            
+            this.ponies[ponyId] = {
+                ...structuredClone(ponyInfo),
+                id: ponyId,
+                search_names: searchNames,
+                image: {
+                    portrait: `/assets/images/ponies/portrait/${ponyId}.png`,
+                    full: `/assets/images/ponies/shop/${ponyId}.png`,
+                },
+            }
+        }
+    }
+
+    transformName(name, options = {
+            ignoreSpaces: true,
+            caseSensitive: false,
+            ignoreAccents: true,
+            ignorePunctuation: true,
+            includeUnused: true,
+        }) {
+            
+        options = {
+            ignoreSpaces: true,
+            caseSensitive: false,
+            ignoreAccents: true,
+            ignorePunctuation: true,
+            includeUnused: true,
+            ...options,
+        }
+
+        if (!options.caseSensitive) {
             name = name.toLocaleLowerCase()
         }
-        if (this.options.ignorePunctuation) {
+        if (options.ignorePunctuation) {
             name = name.replaceAll('-', ' ')
             name = name.replaceAll(/[,.()"']/gm, '')
         }
-        if (this.options.ignoreAccents) {
+        if (options.ignoreAccents) {
             name = normalize(name)
         }
-        if (this.options.ignoreSpaces) {
+        if (options.ignoreSpaces) {
             name = name.replaceAll(' ', '')
         }
 
@@ -148,8 +195,8 @@ export default class GameData {
 
     matchName(name) {
         let transformedName = this.transformName(name)
-        if (transformedName in this.ponyNameMap || transformedName in this.altPonyNames) {
-            let pony = transformedName in this.altPonyNames ? this.altPonyNames[transformedName] : this.ponyNameMap[transformedName]
+        if (transformedName in this.filteredPonyNameMap || transformedName in this.filteredAltPonyNames) {
+            let pony = transformedName in this.filteredAltPonyNames ? this.filteredAltPonyNames[transformedName] : this.filteredPonyNameMap[transformedName]
             return this.getPony(pony.id, pony.name)
         }
 
@@ -159,16 +206,11 @@ export default class GameData {
     searchName(name) {
         name = this.transformName(name)
         if (name == '') {
-            return Object.keys(this.gameData.ponies)
+            return Object.keys(this.ponies)
         }
         let result = []
-        for (let [nameId, pony] of Object.entries(this.ponyNameMap)) {
-            if (nameId.includes(name)) {
-                result.push(pony.id)
-            }
-        }
-        for (let [nameId, pony] of Object.entries(this.altPonyNames)) {
-            if (nameId.includes(name) && !result.includes(pony.id)) {
+        for (let pony of Object.values(this.ponies)) {
+            if (pony.search_names.some((searchName) => searchName.includes(name))) {
                 result.push(pony.id)
             }
         }
@@ -180,13 +222,8 @@ export default class GameData {
             return null
         }
         return {
-            ...structuredClone(this.gameData.ponies[ponyId]),
-            id: ponyId,
+            ...structuredClone(this.ponies[ponyId]),
             usedName: usedName,
-            image: {
-                portrait: `/assets/images/ponies/portrait/${ponyId}.png`,
-                full: `/assets/images/ponies/shop/${ponyId}.png`,
-            },
         }
     }
 }

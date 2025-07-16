@@ -25,20 +25,22 @@ class App {
 
         this.searchBar.on('input', () => this.updateSearch())
 
+        if (this.gameData.getPony(urlHash) != null) {
+            console.log(this.gameData.getPony(urlHash))
+            this.showPonyProfile(urlHash)
+        }
+
         this.createSearchCards()
 
         let searchQuery = new URLSearchParams(location.search).get('q')
         if (searchQuery != null) {
             this.searchBar.val(decodeURI(searchQuery))
+            
         }
 
-        if (this.gameData.getPony(urlHash) != null) {
-            console.log(this.gameData.getPony(urlHash))
-            this.showPonyProfile(urlHash)
-        } else {
+        if (this.currentScreen == 'search') {
             this.updateSearch()
         }
-        
     }
 
     get language() {
@@ -106,7 +108,7 @@ class App {
 
 
         let searchResults = this.gameData.searchName(this.searchBar.val())
-        console.log(searchResults)
+        // console.log(searchResults)
 
         this.searchResultsElement.children().each(function () {
             if (!searchResults.includes(this.id)) {
@@ -119,11 +121,12 @@ class App {
 
     showPonyProfile(ponyId) {
         this.currentScreen = 'ponyProfile'
+        
+        this.searchSection.css('display', 'none')
+        this.ponyProfileSection.css('display', 'block')
 
         let pony = this.gameData.getPony(ponyId)
         // this.searchResultsElement.empty()
-        this.searchSection.css('display', 'none')
-        this.ponyProfileSection.css('display', 'block')
 
 
         this.ponyProfileSection.find('#pony-profile-name').text(pony.name[this.language])

@@ -15,9 +15,6 @@ class AllThePonies {
         this.optionsButton = $('#options')
         this.optionsDialog = $('#options-dialog')
 
-        let windowHeight = window.screen.height * window.devicePixelRatio
-
-
         this.options = {
             ignoreSpaces: true,
             caseSensitive: false,
@@ -54,28 +51,16 @@ class AllThePonies {
         this.gameData = new GameData('/assets/json/game-data.json')
 
         this.ponyInfo = {}
-        this.ponyNameMap = {}
-        this.altNames = {}
-        this.guessedPonies = []
-        this.totalPonies = 0
         this.startTime = 0
 
         
-        this.loadPonies()
         this.update()
         this.bindEventListeners()
     }
 
-    loadPonies() {
-        this.ponyInfo = loadJSON('assets/json/ponies.json')
-    }
-
     update() {
-        this.gameData.options = {
-            ...this.gameData.options,
-            ...this.options,
-        }
         this.gameData.language = this.language
+        this.ponyInfo = this.gameData.generateFilteredList(this.options)
         // this.gameData.update() // We don't need to update because setting the language already updates
         this.updateProgress()
     }
@@ -89,21 +74,7 @@ class AllThePonies {
     }
 
     transformName(name) {
-        if (!this.options.caseSensitive) {
-            name = name.toLocaleLowerCase()
-        }
-        if (this.options.ignorePunctuation) {
-            name = name.replaceAll('-', ' ')
-            name = name.replaceAll(/[,.()"']/gm, '')
-        }
-        if (this.options.ignoreAccents) {
-            name = normalize(name)
-        }
-        if (this.options.ignoreSpaces) {
-            name = name.replaceAll(' ', '')
-        }
-
-        return name
+        return this.gameData.transformName(name, this.options)
     }
 
     bindEventListeners() {
@@ -123,7 +94,15 @@ class AllThePonies {
     checkName() {
         this.nameInput.val(this.nameInput.val().replaceAll('\n', ''))
 
-        let pony = this.gameData.matchName(this.nameInput.val())
+        // let pony = this.gameData.matchName(this.nameInput.val())
+
+        let pony = null
+        let name = this.gameData.transformName(this.nameInput.val(), this.options)
+        if (name in this.ponyInfo.namesMap || name in this.ponyInfo.altNames) {
+            let foundPony = name in this.ponyInfo.altNames ? this.ponyInfo.altNames[name] : this.ponyInfo.namesMap[name]
+            pony = this.gameData.getPony(foundPony.id, foundPony.name)
+        }
+
         if (pony == null) {
             return
         }
@@ -152,7 +131,7 @@ class AllThePonies {
     }
 
     updateProgress() {
-        this.progressElement.text(`${this.guessedPonies.length}/${this.gameData.totalPonies}`)
+        this.progressElement.text(`${this.guessedPonies.length}/${this.ponyInfo.totalPonies}`)
     }
 
     start() {
