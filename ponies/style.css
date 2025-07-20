@@ -82,7 +82,7 @@
     display: none; /* set to block in js */
 }
 
-#pony-profile {
+#pony-profile h1 {
     display: flex;
     align-items: center;
     gap: 0.2em;
