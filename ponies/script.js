@@ -162,6 +162,7 @@ class App {
         this.ponyProfileSection.find('#pony-profile-name').text(pony.name[this.language])
         console.log(pony.image.full)
         this.ponyProfileSection.find('#pony-profile-image').attr('src', pony.image.full)
+        this.ponyProfileSection.find('#pony-profile-portrait-image').attr('src', pony.image.portrait)
         this.ponyProfileSection.find('#pony-profile-description').text(pony.description[this.language])
         this.ponyProfileSection.find('[data-pony-info="level"]').text(pony.unlock_level)
         this.ponyProfileSection.find('[data-pony-info="town"]').text(toTitleCase(LOC.translate(pony.location)))
