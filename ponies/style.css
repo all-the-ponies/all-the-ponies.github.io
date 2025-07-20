@@ -82,6 +82,15 @@
     display: none; /* set to block in js */
 }
 
+#pony-profile {
+    display: flex;
+    align-items: center;
+}
+
+#pony-profile-portrait-image {
+    height: 1em;
+}
+
 
 /* start */
 
