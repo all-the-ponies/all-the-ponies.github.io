@@ -23,32 +23,54 @@
 </head>
 <body>
     <header>
-        <div class="header">
-            <nav>
-                <h1>All The Ponies</h1>
-                <div class="navigation">
-                    <a href="/">Quiz</a>
-                    <a href="/ponies/">Pony browser</a>
+        <aside class="header">
+            <div class="title-bar">
+                <div class="sidebar-toggle">
+                    <input type="checkbox" name="sidebar-toggle" id="sidebar-toggle">
+                    <label for="sidebar-toggle">Toggle sidebar</label>
                 </div>
-            </nav>
-            <select name="language" id="language">
-                <option value="english" selected>English</option>
-                <option value="arabic">Arabic</option>
-                <option value="chinese">Chinese</option>
-                <option value="french">French</option>
-                <option value="german">German</option>
-                <option value="italian">Italian</option>
-                <option value="japanese">Japanese</option>
-                <option value="korean">Korean</option>
-                <option value="brazilian portuguese">Brazilian Portuguese</option>
-                <option value="russian">Russian</option>
-                <option value="spanish">Spanish</option>
-                <option value="thai">Thai</option>
-                <option value="turkish">Turkish</option>
-            </select>
-        </div>
+                <div>
+                    <h1><a href="/">All The Ponies</a></h1>
+                    <select name="language" id="language">
+                        <option value="english" selected>English</option>
+                        <option value="arabic">Arabic</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="french">French</option>
+                        <option value="german">German</option>
+                        <option value="italian">Italian</option>
+                        <option value="japanese">Japanese</option>
+                        <option value="korean">Korean</option>
+                        <option value="brazilian portuguese">Brazilian Portuguese</option>
+                        <option value="russian">Russian</option>
+                        <option value="spanish">Spanish</option>
+                        <option value="thai">Thai</option>
+                        <option value="turkish">Turkish</option>
+                    </select>
+                </div>
+            </div>
+            <div class="sidebar">
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/ponies/">Ponies</a></li>
+                        <li><a href="/houses/">Houses</a></li>
+                        <li><a href="/shops/">Shops</a></li>
+                        <li><a href="/decor/">Decor</a></li>
+                        <hr class="sidebar-separator">
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                        <li><a href="/quiz/">Pony quiz</a></li>
+                    </ul>
+                </nav>
+                <label for="sidebar-toggle" class="sidebar-background"></label>
+            </div>
+        </aside>
     </header>
-    <main>
+    <main id="page-content">
         <div id="search-section">
             <div class="search-container">
                 <label for="search-bar">Search</label>

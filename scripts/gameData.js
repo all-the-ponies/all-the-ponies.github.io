@@ -62,7 +62,7 @@ export default class GameData {
             totalPonies: 0,
         }
 
-        for (let [ponyId, ponyInfo] of Object.entries(this.gameData.ponies)) {
+        for (let [ponyId, ponyInfo] of Object.entries(this.ponies)) {
             if (!options.includeUnused && ponyInfo.tags?.includes('unused')) {
                 console.log('skipping', ponyId)
                 continue
@@ -129,7 +129,7 @@ export default class GameData {
     updatePonies() {
         this.ponies = {}
 
-        for (let [ponyId, ponyInfo] of Object.entries(this.gameData.ponies)) {
+        for (let [ponyId, ponyInfo] of Object.entries(this.gameData.categories.ponies.items)) {
             let searchNames = [
                 this.transformName(
                     fixName(ponyInfo.name[this.language])
@@ -151,10 +151,6 @@ export default class GameData {
                 ...structuredClone(ponyInfo),
                 id: ponyId,
                 search_names: searchNames,
-                image: {
-                    portrait: `/assets/images/ponies/portrait/${ponyId}.png`,
-                    full: `/assets/images/ponies/shop/${ponyId}.png`,
-                },
             }
         }
     }
@@ -213,12 +209,15 @@ export default class GameData {
             if (pony.search_names.some((searchName) => searchName.includes(name))) {
                 result.push(pony.id)
             }
+            if (this.transformName(pony.id).includes(name)) {
+                result.push(pony.id)
+            }
         }
         return result
     }
 
     getPony(ponyId, usedName = null) {
-        if (typeof this.gameData.ponies[ponyId] == 'undefined') {
+        if (typeof this.ponies[ponyId] == 'undefined') {
             return null
         }
         return {

@@ -1,0 +1,593 @@
+{
+  "file_version": 2,
+  "game_version": "10.3.3a",
+  "content_version": "10.3.3.1",
+  "categories": {
+    "ponies": {
+      "name": {},
+      "clones": {
+        "Pony_Twilight_Sparkle": [
+          "Pony_Chaos_Twilight_Sparkle",
+        ]
+      },
+      "items": {
+        "Pony_Twilight_Sparkle": {
+          "locked": false,
+          "index": 1,
+          "name": {
+            "english": "Twilight Sparkle",
+            "arabic": "توايلايت سباركل",
+            "chinese": "Twilight Sparkle",
+            "french": "Twilight Sparkle",
+            "german": "Twilight Sparkle",
+            "italian": "Twilight Sparkle",
+            "japanese": "トワイライトスパークル",
+            "korean": "Twilight Sparkle",
+            "brazilian portuguese": "Twilight Sparkle",
+            "russian": "Сумеречная Искорка",
+            "spanish": "Twilight Sparkle",
+            "thai": "ทไวไลท์สปาร์เคิล",
+            "turkish": "Twilight Sparkle"
+          },
+          "description": {
+            "english": "Princess Celestia's most faithful student, Twilight Sparkle loves to study and wants to learn everything about the Magic of Friendship.",
+            "spanish": "Estudiante de la princesa Celestia. Le apasiona estudiar y quiere aprender sobre la magia de la amistad.",
+            "arabic": "الطالبة الأكثر إخلاصًا للأميرة سليلستيا. توايلايت سباركل تحب الدراسة وتريد أن تتعلم كل شيء عن سحر الصداقة.",
+            "chinese": "Princess Celestia最忠实的学生。Twilight Sparkle热爱学习，愿意了解一切和“友谊的魔法”\n有关的知识。",
+            "french": "Élève la plus fidèle de la princesse Celestia, Twilight Sparkle adore étudier et veut tout savoir sur la Magie de l'Amitié.",
+            "german": "Prinzessin Celestias treueste Schülerin, Twilight Sparkle, liebt es, zu lernen und möchte alles über die Magie der Freundschaft erfahren.",
+            "italian": "Studentessa prediletta di Princess Celestia, Twilight Sparkle adora studiare e vuole scoprire tutto il possibile sulla Magia dell'Amicizia.",
+            "japanese": "セレスティアの一番弟子。勉強ずきなゆう等生だけど、ちょっと真面目すぎる。友じょうのまほうについて勉強中。",
+            "korean": "Twilight Sparkle은 Celestia 공주의 수제자랍니다. 우정의 마법을 배우는 데 열심이죠.",
+            "brazilian portuguese": "Como a estudante mais fiel da Princess Celestia, Twilight Sparkle quer estudar tudo sobre a magia da amizade.",
+            "russian": "Самая преданная ученица Принцессы Селестии, Сумеречная Искорка любит учиться и хочет узнать все о магии дружбы.",
+            "thai": "นักเรียนที่เชื่อใจได้ที่สุดของเจ้าหญิงเซเลสเทีย ทไวไลท์สปาร์เคิลรักการเรียน และต้องการเรียนรู้ทุกอย่างเกี่ยวกับเวทมนตร์แห่งมิตรภาพ",
+            "turkish": "Princess Celestia'nın en sadık öğrencisi Twilight Sparkle ders çalışmayı çok sever ve Arkadaşlığın Sihri hakkında her şeyi öğrenmek ister."
+          },
+          "alt_name": {},
+          "tags": [],
+          "images": {
+            "portrait": "/assets/images/ponies/portrait/Pony_Twilight_Sparkle.png",
+            "vector": ""
+          },
+          "location": "PONYVILLE",
+          "house": "House_Twilight_Sparkle",
+          "inns": [],
+          "changeling": {},
+          'group': [],
+          "max_level": false,
+          "rewards": [
+            {
+              "item": "Gems",
+              "amount": 1
+            },
+            {
+              "item": "Minecart_Wheel",
+              "amount": 1
+            },
+            {
+              "item": "Gems",
+              "amount": 1
+            },
+            {
+              "item": "Bow",
+              "amount": 1
+            },
+            {
+              "item": "Bow",
+              "amount": 1
+            }
+          ],
+          "minigame": {
+            "can_play_minecart": true,
+            "cooldown": 300,
+            "skip_cost": 1,
+            "exp_rank": 2
+          },
+          "arrival_xp": 0,
+          "unlock_level": 0,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 500,            
+            },
+            "actual": {
+              "currency": "Gems",
+              "amount": 500,
+            },
+            "token": {
+              "id": "token",
+              "amount": 5,
+            },
+            "daily_goals": 0,
+          },
+          "tasks": {
+            "task_1": {
+              "name": {},
+              "time": 0,
+              "xp": 0,
+              "bits": 0,
+              "gems": 0,
+              "token": "token",
+              "change": 1,
+              "token_amount": 0,
+              "requires": "Pony",
+            }
+          },
+          "wiki_path": "Twilight_Sparkle",
+          "wiki": {
+            "indie": {
+              "page": {
+                "exists": true,
+                "redirect": false,
+                "path": "Twilight_Sparkle"
+              },
+              "2d_image": {
+                "exists": true,
+                "redirect": false,
+                "path": "File:Twilight_Sparkle_2d.png"
+              },
+              "portrait": {
+                "exists": true,
+                "redirect": false,
+                "path": "File:Twilight_Sparkle_portrait.png"
+              }
+            },
+            "fandom": {
+              "page": {
+                "exists": true,
+                "redirect": false,
+                "path": "Twilight_Sparkle"
+              }
+            }
+          }
+        }
+      }
+    },
+    "houses": {
+      "name": {},
+      "items": {
+          "House_Twilight_Sparkle": {
+          "index": 1,
+          "name": {},
+          "image": "House_Twilight_Sparkle.png",
+          "location": "PONYVILLE",
+          "visitors": [],
+          "grid_size": 4,
+          "build": {
+            "time": 300,
+            "skip": 1
+          }
+        }
+      }
+    },
+    "shops": {
+        "name": {},
+        "items": {
+          "House_Chaos_shop": {
+          "index": 1,
+          "name": {},
+          "image": "House_Chaos_shop.png",
+          "icon": "Consumable_Item_Chaos_Shop.png"
+          "location": "PONYVILLE",
+          "grid_size": 4,
+          "build": {
+            "time": 36000,
+            "skip": 15,
+            "xp": 35,
+          },
+          "time": 500,
+          "produces": {
+            "xp": 25,
+            "bits": 650,
+            "gems": 0,
+          },
+          "can_sell": false,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 500,            
+            },
+            "token": {
+              "id": "token",
+              "amount": 5,
+            },
+            "daily_goals": 0,
+          }
+        }
+      }
+    },
+    "decor": {
+      "name": {},
+      "items": {
+          "Decoration_Pond2": {
+          "index": 1,
+          "name": {},
+          "image": "Decoration_Pond2.png",
+          "location": "PONYVILLE",
+          "limit": 0,
+          "grid_size": 3,
+          "xp": 45,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 500,            
+            },
+            "token": {
+              "id": "token",
+              "amount": 5,
+            },
+            "daily_goals": 0,
+          },
+          "fusion_points": 5,
+          "pro": {
+            "is_pro": true,
+            "size": 3,
+            "time": 4,
+            "bits": 0,
+          }
+        }
+      }
+    },
+    "costumes": {
+      "name": {},
+      "items": {
+        "Pony_Twilight_Sparkle": {
+          "costumes": {
+            "POP_SET_Sweetiebelle_01": {
+              "name": {},
+              "image": "",
+            }
+          },
+          "sets": {
+            "SET_Sombra_TLS_MAIN": {
+              "name": {},
+              "costumes": {
+                "SET_Sombra_TLS_MAIN": {
+                  "image": "",
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pets": {
+      "name": {},
+      "items": {
+          "Pet_Opal": {
+          "index": 1,
+          "name": {},
+          "image": "Pet_Opal.png",
+          "pony": "Pony_Rarity",
+          "minecart": 40,
+          "task": 10,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 500,            
+            },
+            "token": {
+              "id": "token",
+              "amount": 5,
+            },
+          },
+        }
+      }
+    },
+    "avatars": {
+      "name": {},
+      "items": {
+          "ProfileAvatar_Big_Mac": {
+          "index": 1,
+          "name": {},
+          "image": "ProfileAvatar_Big_Mac.png",
+          "is_default": true,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 200,
+            }
+          },
+          "pony": "",
+        }
+      }
+    },
+    "avatar_frames": {
+      "name": {},
+      "items": {
+          "ProfileAvatarFrame_default": {
+          "index": 1,
+          "name": {},
+          "image": "ProfileAvatarFrame_default.png",
+          "is_default": true,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 200,
+            }
+          },
+        }
+      }
+    },
+    "backgrounds": {
+      "name": {},
+      "items": {
+          "PlayerCardBackground_default": {
+          "index": 1,
+          "name": {},
+          "image": {
+            "small": "PlayerCardBackground_default.png",
+            "full": "PlayerCardBackground_default.png",
+          },
+          "is_default": true,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 200,
+            }
+          },
+        }
+      }
+    },
+    "background_frames": {
+      "name": {},
+      "items": {
+          "PlayerCardBackgroundFrame_default": {
+          "index": 1,
+          "name": {},
+          "image": "PlayerCardBackgroundFrame_default.png",
+          "is_default": true,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 200,
+            }
+          },
+        }
+      }
+    },
+    "cutie_marks": {
+      "name": {},
+      "items": {
+        "PlayerCardCutieMark_default": {
+          "index": 1,
+          "name": {},
+          "image": "PlayerCardCutieMark_default.png",
+          "is_default": true,
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 200,
+            }
+          },
+          "pony": "",
+        }
+      }
+    },
+    "paths": {
+      "name": {},
+      "items": {
+        "Path_Cobble": {
+          "index": 1,
+          "name": {},
+          "image": "Path_Cobble.png",
+          "cost": {
+            "base": {
+              "currency": "Gems",
+              "amount": 500,
+            }
+          }
+        }
+      }
+    },
+    "tokens": {
+      "name": {},
+      "items": {
+        "Token_CE_Unlock": {
+          "index": 1,
+          "name": {},
+          "image": "Token_CE_Unlock.png",
+          "chance": 1,
+          "tasks": [
+            {
+              "task": "task_1",
+              "pony": "Pony_Twilight_Sparkle",
+            }
+          ],
+          "unlimited": false,
+          "no_reset": true,
+        }
+      }
+    },
+    "items": {
+      "name": {},
+      "items": {
+        "Gems": {
+          "name": {},
+          "image": "Gems.png",
+          "alt_id": [
+            "gems",
+            "Gem",
+          ]
+        }
+      }
+    },
+  },
+  "collections": {
+    "name": {},
+    "itmes": {
+      "Collection_C0002": {
+        "index": 4,
+        "name": {},
+        "ponies": [
+          {
+            "id": "Pony",
+            "alt": "Pony",
+            "count": 5
+          }
+        ],
+        "reward": {
+          "main": {
+            "item": "Pony",
+            "count": 1,
+          },
+          "alt": {
+            "item": "Gems",
+            "amount": 50,
+          }
+        }
+      }
+    }
+  },
+  "equestria_girls": {
+    "name": {},
+    "loot_tables": {
+      "loot_table_1": {
+        "name": {},
+        "rewards": [
+          {
+            "item": "Bits",
+            "min": 10,
+            "max": 20,
+          }
+        ]
+      }
+    }
+  },
+  "group_quests": {
+    "name": {},
+    "random_pros": [],
+    "quests": {
+      "GQ_2_In_the_Yak_of_It": {
+        "name": {},
+        "description": {},
+        "pros": [],
+      }
+    },
+    "slots": [
+      {
+        "name": {},
+        "loot": [
+          {
+            "image": "gq_silver_chest_1.png",
+            "items": [
+              {
+                "item": "Pony_Rambler",
+                "max": 1,
+                "weight": 189,
+                "min": 1
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "key_chest": {
+      {
+        "item": "Coins",
+        "max": 10000,
+        "weight": 1215,
+        "min": 1000
+      }
+    },
+    "alt_rewards": [
+      {
+        "item": "Coins",
+        "max": 10000,
+        "weight": 1215,
+        "min": 1000
+      }
+    ]
+  },
+  "balloon_pop": {
+    "name": {},
+    "lotteries": [
+      {
+        "name": {},
+        "rewards": [],
+        "alt_rewards": [],
+      }
+    ]
+  },
+  "ferris_wheel": {
+    "name": {},
+    "sectors": [
+      {
+        "lot": [],
+      }
+    ]
+  },
+  "find_a_pair": {
+    "name": {},
+    "rewards": [
+      {
+        "points": 500,
+        "reward": {
+          "item": "Pony",
+          "amount": 1,
+        },
+        "alt_reward": {{
+          "item": "Gems",
+          "amount": 1,
+        }
+      }
+    ],
+    "infinite_rewards": [],
+  },
+  "minecart": {
+    "name": {},
+    "rewards": [
+      {
+        "points": 500,
+        "reward": {
+          "item": "Pony",
+          "amount": 1,
+        },
+        "alt_reward": {{
+          "item": "Gems",
+          "amount": 1,
+        }
+      }
+    ]
+  },
+  "fasion_show": {
+    "name": {},
+    "collections": {
+      "Collection_C0057": {
+        "name": {},
+        "items": [
+          {
+            "pony": "Pony",
+            "parts": ["part"]
+          }
+        ],
+        "reward": {
+          "main": {
+            "item": "Pony",
+            "amount": 1,
+          },
+          "alt": {
+            "item": "Gems",
+            "amount": 1,
+          }
+        }
+      }
+    }
+  },
+  "daily_goals": {
+    "name": {},
+    "items": {
+      "pony": {
+        "Pony_Rarity": 125,
+      },
+      "shop": {
+        "House_Chaos_shop": 515,
+      },
+      "decor": {
+        "Decoration_Pond2": 51651,
+      }
+    }
+  },
+  "quests": {},
+}

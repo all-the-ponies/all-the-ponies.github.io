@@ -122,7 +122,7 @@ class App {
     createSearchCards() {
         this.searchResultsElement.empty()
         
-        for (let ponyId of Object.keys(this.gameData.gameData.ponies)) {
+        for (let ponyId of Object.keys(this.gameData.ponies)) {
             if ($(`#${ponyId}`).length == 0) {
                 // console.log('does not exist', $(`#${ponyId}`).length )
                 this.searchResultsElement.append(this.createPonyCard(ponyId))
@@ -168,12 +168,13 @@ class App {
         this.ponyProfileSection.find('[data-pony-info="town"]').text(toTitleCase(LOC.translate(pony.location)))
         this.ponyProfileSection.find('[data-pony-info="arrival-bonus"]').text(pony.arrival_xp)
         this.ponyProfileSection.find('[data-pony-info="House"]').text(pony.house)
-        this.ponyProfileSection.find('[data-pony-info="minigame-cooldown"]').text(pony.minigames.minigame_cooldown + 's')
-        this.ponyProfileSection.find('[data-pony-info="minigame-skip-cost"]').text(pony.minigames.minigame_skip_cost)
+        this.ponyProfileSection.find('[data-pony-info="minigame-cooldown"]').text(pony.minigame.cooldown + 's')
+        this.ponyProfileSection.find('[data-pony-info="minigame-skip-cost"]').text(pony.minigame.skip_cost)
 
+        return
         let starRewardsElement = this.ponyProfileSection.find('[data-pony-info="star-rewards"]')
         let starRewardsBar = starRewardsElement.find('.star-rewards-bar')
-        if (pony.rewards.length == 0) {
+        if (pony.rewards.length == 0 || pony.max_level) {
             starRewardsBar.css('display', 'none')
             starRewardsElement.find('.none-star-rewards').css('display', 'inline')
         } else {
