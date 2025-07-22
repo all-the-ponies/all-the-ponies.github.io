@@ -196,7 +196,7 @@ main {
 
     .sidebar {
         /* display: none; */
-        display: grid;
+        display: none;
         grid-template-columns: clamp(15rem, 65vw, 25rem) 1fr;
         opacity: 0;
 
@@ -211,6 +211,7 @@ main {
     }
 
     .header:has(.sidebar-toggle > input:checked) .sidebar {
+        display: grid;
         opacity: 1;
     }
 
