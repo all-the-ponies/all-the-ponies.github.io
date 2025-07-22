@@ -98,6 +98,18 @@ export function scrollIntoViewWithOffset(element, offset, behavior = 'instant') 
   })
 }
 
+export function setURL(url, replace = false) {
+    if (history && history.replaceState) {
+      if (replace) {
+        history.replaceState("", "", url);
+      } else {
+        history.pushState('', '', url)
+      }
+    } else {
+        location.href = url
+    }
+}
+
 export function setUrlParameter(param, value, replace = false) {
     const url = new URL(location.href)
     if (value) {

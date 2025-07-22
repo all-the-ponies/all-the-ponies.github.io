@@ -17,9 +17,8 @@
     <meta property="og:image" content="/favicon/favicon.png" />
 
     <link rel="stylesheet" href="/styles/style.css">
-    <link rel="stylesheet" href="style.css">
 
-    <script type="module" src="script.js" defer></script>
+    <script type="module" src="/app.js" defer></script>
 </head>
 <body>
     <header>
@@ -50,7 +49,7 @@
             </div>
             <div class="sidebar">
                 <nav>
-                    <ul>
+                    <ul id="sidebar-links">
                         <li><a href="/">Home</a></li>
                         <li><a href="/ponies/">Ponies</a></li>
                         <li><a href="/houses/">Houses</a></li>
@@ -71,148 +70,6 @@
         </aside>
     </header>
     <main id="page-content">
-        <div id="search-section">
-            <div class="search-container">
-                <label for="search-bar">Search</label>
-                <input type="search" name="search-bar" id="search-bar" placeholder="Pony">
-            </div>
-            <section id="search-results">
-                <!-- <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Russet-Maned Future Townspony</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div>
-                <div class="pony-card">
-                    <div class="pony-name">Pony name</div>
-                    <div class="pony-card-body">
-                        <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                    </div>
-                </div> -->
-            </section>
-        </div>
-        <div id="pony-profile">
-            <div>
-                <a href="" class="to-search">BAck</a>
-                <h1><img id="pony-profile-portrait-image" src="/assets/images/ponies/portrait/Pony_Placeholder.png" alt=""><span id="pony-profile-name">Pony Name</span></h1>
-                <img id="pony-profile-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-                <div class="stars">
-                    <button class="star" data-filled="1"></button>
-                    <button class="star" data-filled="1"></button>
-                    <button class="star" data-filled="1"></button>
-                    <button class="star" data-filled="0"></button>
-                    <button class="star" data-filled="0"></button>
-                </div>
-                <p id="pony-profile-description">This is a description</p>
-            </div>
-            <div class="pony-profile-info">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Unlock Level</td>
-                            <td data-pony-info="level">0</td>
-                        </tr>
-                        <tr>
-                            <td>Town</td>
-                            <td data-pony-info="town">Ponyville</td>
-                        </tr>
-                        <tr>
-                            <td>Arrival Bonus</td>
-                            <td><span data-pony-info="arrival-bonus">0</span> <img class="item" src="/assets/images/items/XP.png" alt=""></td>
-                        </tr>
-                        <tr>
-                            <td>House</td>
-                            <td data-pony-info="House">None</td>
-                        </tr>
-                        <tr>
-                            <td>Minigame Cooldown</td>
-                            <td data-pony-info="minigame-cooldown">0s</td>
-                        </tr>
-                        <tr>
-                            <td>Minigame Skip Cost</td>
-                            <td><span data-pony-info="minigame-skip-cost">0</span> <img class="item" src="/assets/images/items/Gems.png" alt=""></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="table-header">Level Up Rewards</td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <div class="star-rewards" data-pony-info="star-rewards">
-                                    <span class="none-star-rewards">None</span>
-                                    <div class="star-rewards-bar" data-stars="4">
-                                        <div class="star-reward"><img src="/assets/images/items/Minecart_Wheel.png" alt="Minecart Wheel" title="Minecart Wheel"></div>
-                                        <div class="star-reward"><img src="/assets/images/items/Minecart_Wheel.png" alt="Minecart Wheel" title="Minecart Wheel"></div>
-                                        <div class="star-reward"><img src="/assets/images/items/Minecart_Wheel.png" alt="Minecart Wheel" title="Minecart Wheel"></div>
-                                        <div class="star-reward"><img src="/assets/images/items/Minecart_Wheel.png" alt="Minecart Wheel" title="Minecart Wheel"></div>
-                                        <div class="star-reward"><img src="/assets/images/items/Minecart_Wheel.png" alt="Minecart Wheel" title="Minecart Wheel"></div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </main>
-    
-    <dialog id="options-dialog" class="dialog">
-        <h1 class="dialog-header">Options</h1>
-        <div class="dialog-body">
-            <form action="dialog">
-                <div class="form-options">
-                    <!-- <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
-                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
-                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div>
-                    <div class="option"><input type="checkbox" name="" id=""><label for=""></label></div> -->
-                </div>
-                <div class="dialog-confirmation">
-                    <button class="button-red" type="submit" value="cancel" formmethod="dialog">Cancel</button>
-                    <button class="button-green" type="submit" value="ok" formmethod="dialog">OK</button>
-                </div>
-            </form>
-        </div>
-    </dialog>
-
-    <template id="pony-card">
-        <style>
-
-        </style>
-        <div class="pony-card">
-            <div class="pony-name">Pony name</div>
-            <div class="pony-card-body">
-                <img class="pony-image" src="/assets/images/ponies/shop/Pony_Placeholder.png" alt="">
-            </div>
-        </div>
-    </template>
 </body>
 </html>

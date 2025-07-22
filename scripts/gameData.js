@@ -21,10 +21,11 @@ export default class GameData {
             ...options,
         }
         this.gameData = loadJSON(this.gameDataPath)
-
-        this.tags = ['unused']
-
         this._language = 'english'
+
+        this.languages = this.gameData.languages
+
+        this.categories = this.gameData.categories
 
         this.ponies = {}
 
