@@ -234,13 +234,13 @@ main {
 
 /* Elements */
 
-a {
+.page-content .link {
     color: var(--pink);
     text-decoration: none;
 }
 
-#page-content a:hover,
-#page-content a:focus {
+.page-content .link:hover,
+.page-content .link:focus {
     color: var(--pink-dark);
     text-decoration: underline;
 }
