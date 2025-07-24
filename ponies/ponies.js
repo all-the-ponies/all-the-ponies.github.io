@@ -119,15 +119,28 @@ export default class Ponies extends Page {
     }
 
     createSearchCards() {
-        this.searchResultsElement.empty()
+        // this.searchResultsElement.empty()
         
         for (let ponyId of Object.keys(gameData.ponies)) {
-            if ($(`#${ponyId}`).length == 0) {
-                // console.log('does not exist', $(`#${ponyId}`).length )
+            let ponyCard = document.getElementById(ponyId)
+            if (ponyCard == null) {
                 this.searchResultsElement.append(this.createPonyCard(ponyId))
+            } else {
+                let pony = gameData.getPony(ponyId)
+                ponyCard.querySelector('.pony-name').innerText = pony.name[this.language]
             }
         }
+
+        let children = Array.from(this.searchResultsElement[0].children)
+        this.searchResultsElement[0].replaceChildren(...children.sort(this.sortResults))
+
         this.searchCreated = true
+    }
+
+    sortResults(el1, el2) {
+        let pony1 = gameData.getPony(el1.id)
+        let pony2 = gameData.getPony(el2.id)
+        return pony1.index - pony2.index
     }
 
     updateSearch() {

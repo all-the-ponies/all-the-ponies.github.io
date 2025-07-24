@@ -3,6 +3,11 @@ export default class Page {
         this.content = document.getElementById('page-content')
         this.languageSelector = document.getElementById('language')
     }
+
+    get language() {
+        return this.languageSelector.value
+    }
+
     async load() {
         const response = await fetch('layout.html')
         if (!response.ok) {
@@ -14,8 +19,4 @@ export default class Page {
     }
     async reload() {}
     async update() {}
-
-    get language() {
-        return this.languageSelector.value
-    }
 }
